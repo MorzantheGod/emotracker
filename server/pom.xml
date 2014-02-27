@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.innermansoftware</groupId>
+    <artifactId>emotracker</artifactId>
+    <packaging>pom</packaging>
+
+    <version>0.1-SNAPSHOT</version>
+    <modules>
+        <module>emotracker-api</module>
+        <module>emotracker-core</module>
+    </modules>
+    <name>emotracker</name>
+
+    <profiles>
+        <profile>
+            <id>dev-emotracker</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+
+            </properties>
+        </profile>
+
+        <profile>
+            <id>release-emotracker</id>
+            <properties>
+
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
