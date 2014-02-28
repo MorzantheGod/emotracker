@@ -1,9 +1,9 @@
 package com.innerman.emotracker.service;
 
-import com.innerman.emotracker.config.EmoException;
-import com.innerman.emotracker.config.ErrorType;
 import com.innerman.emotracker.dto.RegistrationDTO;
 import com.innerman.emotracker.model.UserEntity;
+import com.innerman.emotracker.utils.EmoException;
+import com.innerman.emotracker.utils.ErrorType;
 import org.apache.log4j.Logger;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

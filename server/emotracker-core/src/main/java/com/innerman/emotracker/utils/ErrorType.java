@@ -1,4 +1,4 @@
-package com.innerman.emotracker.config;
+package com.innerman.emotracker.utils;
 
 /**
  * User: petrpopov

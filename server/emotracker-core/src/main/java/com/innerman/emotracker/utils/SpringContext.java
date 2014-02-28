@@ -1,4 +1,4 @@
-package com.innerman.emotracker.config;
+package com.innerman.emotracker.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
