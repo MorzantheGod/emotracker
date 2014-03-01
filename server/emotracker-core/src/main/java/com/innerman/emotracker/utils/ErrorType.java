@@ -7,5 +7,6 @@ package com.innerman.emotracker.utils;
  */
 public enum ErrorType {
 
-    user_already_exists
+    user_already_exists,
+    token_invalid
 }

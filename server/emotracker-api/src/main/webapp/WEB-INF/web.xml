@@ -33,6 +33,29 @@
     <!--</filter-mapping>-->
     <!--&lt;!&ndash; Filter for correct UTF-8 encodings ends &ndash;&gt;-->
 
+    <!-- Filter for removing jsessionid from s:urls -->
+    <filter>
+        <filter-name>DisableUrlSessionFilter</filter-name>
+        <filter-class>com.innerman.emotracker.web.utils.DisableUrlSessionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisableUrlSessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- Filter for removing jsessionid from s:urls ends -->
+
+
+    <!-- Spring Security filter starts -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- Spring security filter ends -->
+
     <!-- Spring main servlet starts -->
     <servlet>
         <servlet-name>emotracker-api</servlet-name>

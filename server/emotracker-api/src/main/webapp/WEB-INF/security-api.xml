@@ -1,0 +1,35 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <http auto-config="true"  access-denied-page="/error403.jsp" use-expressions="true">
+        <form-login login-page="/signin" default-target-url="/index"
+                    authentication-failure-url="/signin?error=true" />
+
+        <!--<intercept-url pattern="/signin" access="permitAll"/>-->
+        <!--<intercept-url pattern="/manifest" access="permitAll"/>-->
+        <!--<intercept-url pattern="/help" access="permitAll"/>-->
+        <!--<intercept-url pattern="/error" access="permitAll"/>-->
+        <!--<intercept-url pattern="/errors/*" access="permitAll"/>-->
+        <intercept-url pattern="/api/*" access="permitAll"/>
+
+        <!--intercept-url pattern="/" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/index*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/home*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/main*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/location/*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+
+        <intercept-url pattern="/api/locations*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/api/votes*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/api/rates*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/api/users/changeemail*" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" /-->
+
+        <!--<custom-filter ref="cheatRememberFilter" position="REMEMBER_ME_FILTER"/>-->
+
+    </http>
+
+</beans:beans>

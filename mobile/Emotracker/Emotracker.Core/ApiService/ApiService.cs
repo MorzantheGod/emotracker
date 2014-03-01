@@ -10,6 +10,11 @@ namespace Emotracker.Core
 	{
 		private static readonly String BASE_URL = "http://localhost:8080/api/";
 
+		public WebMessage sendPostRequest(String url) 
+		{
+			return sendRequest (url, Method.POST, null);
+		}
+
 		public WebMessage sendPostRequest(String url, Dictionary<string, Object> param)
 		{
 			return sendRequest (url, Method.POST, param);
@@ -25,10 +30,13 @@ namespace Emotracker.Core
 			var client = new RestClient (BASE_URL);
 			var request = new RestRequest (buildUrl(url), method);
 
-			foreach(KeyValuePair<string, Object> item in param)
-			{
-				request.AddParameter (item.Key, item.Value);
+			if (param != null) {
+				foreach(KeyValuePair<string, Object> item in param)
+				{
+					request.AddParameter (item.Key, item.Value);
+				}
 			}
+
 
 			IRestResponse response = client.Execute (request);
 			WebException e = response.ErrorException as WebException;

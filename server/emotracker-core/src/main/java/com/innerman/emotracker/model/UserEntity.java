@@ -1,9 +1,11 @@
 package com.innerman.emotracker.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: petrpopov
@@ -19,10 +21,15 @@ public class UserEntity implements Serializable {
 
     private String fullName;
     private String userName;
+
+    @Indexed
     private String email;
 
     private String passwordHash;
     private String salt;
+
+    private List<UserRole> roles;
+    private List<TokenEntity> tokens;
 
     public String getId() {
         return id;
@@ -70,6 +77,22 @@ public class UserEntity implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
+    }
+
+    public List<TokenEntity> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<TokenEntity> tokens) {
+        this.tokens = tokens;
     }
 
     @Override

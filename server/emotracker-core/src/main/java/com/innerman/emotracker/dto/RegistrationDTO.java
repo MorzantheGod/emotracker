@@ -28,6 +28,18 @@ public class RegistrationDTO {
     @NotNull
     private String email;
 
+    @NotBlank
+    @NotNull
+    private String tokenId;
+
+    @NotBlank
+    @NotNull
+    private String key;
+
+    @NotBlank
+    @NotNull
+    private String token;
+
     public String getFullName() {
         return fullName;
     }
@@ -58,5 +70,29 @@ public class RegistrationDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTokenId() {
+        return tokenId;
+    }
+
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

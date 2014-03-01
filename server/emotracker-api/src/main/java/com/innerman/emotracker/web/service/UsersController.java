@@ -31,14 +31,14 @@ public class UsersController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public Object createNewUser(@Valid RegistrationDTO dto, BindingResult result) {
+    public Object createNewUser(@Valid RegistrationDTO regDto, BindingResult result) {
 
         if( result.hasErrors() ) {
             return WebMessage.createValidationError();
         }
 
         try {
-            UserEntity newUser = userService.createNewUser(dto);
+            UserEntity newUser = userService.createNewUser(regDto);
             return WebMessage.createOK(newUser);
 
         } catch (EmoException e) {

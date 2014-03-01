@@ -12,6 +12,8 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
+    <import resource="security-core.xml"/>
+
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <context:annotation-config/>

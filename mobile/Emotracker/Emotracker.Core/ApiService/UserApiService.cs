@@ -15,6 +15,9 @@ namespace Emotracker.Core
 			param.Add ("userName", dto.UserName);
 			param.Add ("email", dto.Email);
 			param.Add ("password", dto.Password);
+			param.Add ("tokenId", dto.TokenId);
+			param.Add ("key", dto.Key);
+			param.Add ("token", dto.Token);
 
 			WebMessage res = this.sendPostRequest (CREATE_USER, param);
 			return res;
