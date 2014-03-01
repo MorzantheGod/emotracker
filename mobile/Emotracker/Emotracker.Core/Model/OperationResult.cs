@@ -2,6 +2,7 @@ using System;
 
 namespace Emotracker.Core
 {
+	[Serializable]
 	public class OperationResult
 	{
 		public Boolean Result { get; set; }

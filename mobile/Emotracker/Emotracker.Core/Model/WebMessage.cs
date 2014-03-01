@@ -2,6 +2,7 @@
 
 namespace Emotracker.Core
 {
+	[Serializable]
 	public class WebMessage
 	{
 		public String State { get; set; }

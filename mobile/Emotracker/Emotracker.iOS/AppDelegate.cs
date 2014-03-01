@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using Emotracker.Core;
 
 namespace Emotracker.iOS
 {
@@ -29,11 +30,16 @@ namespace Emotracker.iOS
 		//
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
-
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			root = new UIViewController ();
 
-			initialViewController = Storyboard.InstantiateInitialViewController () as UIViewController;
+			UserDTO dto = StorageService.getUserData ();
+			if (dto != null) {
+				initialViewController = Storyboard.InstantiateViewController ("ResultsViewController") as UIViewController;
+			} else {
+				initialViewController = Storyboard.InstantiateInitialViewController () as UIViewController;
+			}
+
 			root.View.AddSubview (initialViewController.View);
 			//if (initialViewController is LoginViewController) {
 			//		LoginViewController loginView = initialViewController as LoginViewController;

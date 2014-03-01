@@ -14,6 +14,8 @@ namespace Emotracker.iOS
 		public static UIStoryboard Storyboard = UIStoryboard.FromName ("Main", null);
 		public static UIViewController resultsViewController;
 
+		public LoginService loginService = new LoginService();
+
 		public LoginViewController() : base()
 		{
 		}
@@ -52,7 +54,7 @@ namespace Emotracker.iOS
 			loadingOverlay = new LoadingOverlay (UIScreen.MainScreen.Bounds, "Signing in..");
 			View.Add (loadingOverlay);
 
-			OperationResult res = LoginService.login(getLoginData());
+			OperationResult res = loginService.login(getLoginData());
 
 			loadingOverlay.Hide();
 			if (res.Result == false) {

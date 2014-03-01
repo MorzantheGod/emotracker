@@ -2,6 +2,7 @@
 
 namespace Emotracker.Core
 {
+	[Serializable]
 	public class RegistrationDTO
 	{
 		public string FullName { get; set; }

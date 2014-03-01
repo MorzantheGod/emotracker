@@ -1,21 +1,26 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Emotracker.Core
 {
 	public class LoginService
 	{
-		public LoginService ()
-		{
-		}
+		private UserApiService userApiService = new UserApiService ();
 
-		public static OperationResult login(LoginDTO dto)
+		public OperationResult login(LoginDTO dto)
 		{
-			return login (dto.Email, dto.Password);
-		}
+			WebMessage mes = userApiService.loginUser (dto);
 
-		public static OperationResult login(string email, string password)
-		{
-			return new OperationResult (true, "OK");
+			UserDTO userDto;
+			if (mes.Result != null) {
+				userDto = JsonConvert.DeserializeObject<UserDTO> (mes.Result.ToString ());
+
+				StorageService.saveUserData (userDto);
+			}
+
+
+			OperationResult res = MessageConverter.fromWebMessage (mes);
+			return res;
 		}
 	}
 }

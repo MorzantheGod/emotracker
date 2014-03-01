@@ -43,14 +43,25 @@ namespace Emotracker.Core
 			if (e != null) {
 				Console.WriteLine (e.Status);
 
-				WebMessage mes = new WebMessage ();
-				mes.State = MessageConverter.ERROR_RESULT;
-				mes.Message = "Sorry, some problems with a server";
-				return mes;
+				return getErrorWebMessage ();
 			}
 
-			WebMessage ans = JsonConvert.DeserializeObject<WebMessage> (response.Content);
+			WebMessage ans;
+			try {
+				ans = JsonConvert.DeserializeObject<WebMessage> (response.Content);
+			}
+			catch( Exception ex ) {
+				return getErrorWebMessage ();
+			}
+
 			return ans;
+		}
+
+		private WebMessage getErrorWebMessage() {
+			WebMessage mes = new WebMessage ();
+			mes.State = MessageConverter.ERROR_RESULT;
+			mes.Message = "Sorry, some problems with a server";
+			return mes;
 		}
 
 		private string buildUrl(string url)
