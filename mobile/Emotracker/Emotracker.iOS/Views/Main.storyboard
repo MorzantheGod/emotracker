@@ -137,14 +137,30 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R8l-ev-8Sx">
+                                <rect key="frame" x="20" y="69" width="280" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sorry, can't proceed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SXQ-dZ-aeC">
+                                        <rect key="frame" x="20" y="5" width="240" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Palatino-Roman" family="Palatino" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Sign up here" id="JRl-3E-6iw"/>
                     <connections>
                         <outlet property="emailField" destination="Hmb-0c-jP2" id="sqU-BU-F2z"/>
+                        <outlet property="messageView" destination="R8l-ev-8Sx" id="NO1-UM-tt1"/>
                         <outlet property="nameField" destination="ZTe-qS-7Mq" id="Sn3-jF-N7G"/>
                         <outlet property="passwordField" destination="WBF-e9-V1Y" id="EVP-IY-1e9"/>
+                        <outlet property="regMessageLabel" destination="SXQ-dZ-aeC" id="LUs-uV-UQW"/>
                         <outlet property="registrationButton" destination="ylE-kn-nCH" id="2TH-tB-1Rl"/>
                         <outlet property="userName" destination="v5e-Xq-Ece" id="c3u-pQ-pGL"/>
                     </connections>

@@ -21,6 +21,8 @@ namespace Emotracker.iOS
 		public static UIStoryboard Storyboard = UIStoryboard.FromName ("Main", null);
 		public static UIViewController resultsViewController;
 
+		public RegistrationService registrationService = new RegistrationService ();
+
 		public RegistrationViewController() : base()
 		{
 			resultsViewController = Storyboard.InstantiateViewController("ResultsViewController") as UIViewController;
@@ -75,7 +77,7 @@ namespace Emotracker.iOS
 			loadingOverlay = new LoadingOverlay (UIScreen.MainScreen.Bounds, "Signing up..");
 			View.Add (loadingOverlay);
 
-			OperationResult res = RegistrationService.registerNewUser (getRegistrationDTO ());
+			OperationResult res = registrationService.registerNewUser (getRegistrationDTO ());
 			loadingOverlay.Hide();
 
 			if (res.Result == false) {

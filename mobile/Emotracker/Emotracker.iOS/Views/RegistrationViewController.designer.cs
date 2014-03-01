@@ -16,6 +16,9 @@ namespace Emotracker.iOS
 		MonoTouch.UIKit.UITextField emailField { get; set; }
 
 		[Outlet]
+		MonoTouch.UIKit.UIView messageView { get; set; }
+
+		[Outlet]
 		MonoTouch.UIKit.UITextField nameField { get; set; }
 
 		[Outlet]
@@ -25,10 +28,18 @@ namespace Emotracker.iOS
 		MonoTouch.UIKit.UIButton registrationButton { get; set; }
 
 		[Outlet]
+		MonoTouch.UIKit.UILabel regMessageLabel { get; set; }
+
+		[Outlet]
 		MonoTouch.UIKit.UITextField userName { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (emailField != null) {
+				emailField.Dispose ();
+				emailField = null;
+			}
+
 			if (nameField != null) {
 				nameField.Dispose ();
 				nameField = null;
@@ -39,9 +50,9 @@ namespace Emotracker.iOS
 				passwordField = null;
 			}
 
-			if (emailField != null) {
-				emailField.Dispose ();
-				emailField = null;
+			if (registrationButton != null) {
+				registrationButton.Dispose ();
+				registrationButton = null;
 			}
 
 			if (userName != null) {
@@ -49,9 +60,14 @@ namespace Emotracker.iOS
 				userName = null;
 			}
 
-			if (registrationButton != null) {
-				registrationButton.Dispose ();
-				registrationButton = null;
+			if (messageView != null) {
+				messageView.Dispose ();
+				messageView = null;
+			}
+
+			if (regMessageLabel != null) {
+				regMessageLabel.Dispose ();
+				regMessageLabel = null;
 			}
 		}
 	}

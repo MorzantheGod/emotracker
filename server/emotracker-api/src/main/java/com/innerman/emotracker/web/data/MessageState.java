@@ -7,5 +7,6 @@ package com.innerman.emotracker.web.data;
  */
 public enum MessageState {
     OK,
-    ERROR
+    ERROR,
+    VALIDATION_ERROR
 }

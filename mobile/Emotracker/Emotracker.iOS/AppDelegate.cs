@@ -29,22 +29,22 @@ namespace Emotracker.iOS
 		//
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
+
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			root = new UIViewController ();
 
 			initialViewController = Storyboard.InstantiateInitialViewController () as UIViewController;
 			root.View.AddSubview (initialViewController.View);
-			if (initialViewController is LoginViewController) {
-				LoginViewController loginView = initialViewController as LoginViewController;
-				loginView.InitialActionCompleted += (object sender, EventArgs e) => {
-					loginView.View.RemoveFromSuperview ();
+			//if (initialViewController is LoginViewController) {
+			//		LoginViewController loginView = initialViewController as LoginViewController;
+			//		loginView.InitialActionCompleted += (object sender, EventArgs e) => {
+			//			loginView.View.RemoveFromSuperview ();
 
-					mainViewController = Storyboard.InstantiateViewController("ResultsViewController") as UIViewController;
-					root.AddChildViewController (mainViewController);
-					root.Add (mainViewController.View);
-				};
-			}
-
+			//			mainViewController = Storyboard.InstantiateViewController("ResultsViewController") as UIViewController;
+			//			root.AddChildViewController (mainViewController);
+			//			root.Add (mainViewController.View);
+			//		};
+			//
 			window.RootViewController = root;
 			window.MakeKeyAndVisible ();
 			

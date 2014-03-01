@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 
@@ -28,8 +29,13 @@ public class UsersController {
     private UserService userService;
 
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
     public Object createNewUser(@Valid RegistrationDTO dto, BindingResult result) {
+
+        if( result.hasErrors() ) {
+            return WebMessage.createValidationError();
+        }
 
         try {
             UserEntity newUser = userService.createNewUser(dto);

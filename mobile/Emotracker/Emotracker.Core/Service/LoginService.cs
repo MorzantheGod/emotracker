@@ -8,14 +8,14 @@ namespace Emotracker.Core
 		{
 		}
 
-		public static Boolean login(LoginDTO dto)
+		public static OperationResult login(LoginDTO dto)
 		{
 			return login (dto.Email, dto.Password);
 		}
 
-		public static Boolean login(string email, string password)
+		public static OperationResult login(string email, string password)
 		{
-			return true;
+			return new OperationResult (true, "OK");
 		}
 	}
 }

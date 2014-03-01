@@ -18,6 +18,8 @@ public class WebMessage implements Serializable {
     private String message;
     private Object result;
 
+    private static final String VALIDATION_ERROR = "validation_error";
+
     public static WebMessage createOK(Object result) {
 
         WebMessage mes = new WebMessage();
@@ -55,6 +57,15 @@ public class WebMessage implements Serializable {
     public static WebMessage createError(EmoException e) {
 
         return createError(e.getErrorType());
+    }
+
+    public static WebMessage createValidationError() {
+
+        WebMessage mes = new WebMessage();
+        mes.setState(MessageState.VALIDATION_ERROR);
+        mes.setMessage( MessageProvider.getMessage(VALIDATION_ERROR));
+
+        return mes;
     }
 
     public MessageState getState() {

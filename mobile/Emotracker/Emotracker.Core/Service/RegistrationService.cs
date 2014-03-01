@@ -1,15 +1,20 @@
 using System;
+using RestSharp;
+using Newtonsoft.Json;
+using PerpetualEngine.Storage;
 
 namespace Emotracker.Core
 {
 	public class RegistrationService
 	{
-		public RegistrationService ()
-		{
-		}
+		private UserApiService userApiService = new UserApiService ();
+	
+		public OperationResult registerNewUser(RegistrationDTO dto) {
 
-		public static OperationResult registerNewUser(RegistrationDTO dto) {
-			return new OperationResult(true, "OK");
+			WebMessage mes = userApiService.createNewUser (dto);
+
+			OperationResult res = MessageConverter.fromWebMessage (mes);
+			return res;
 		}
 	}
 }
