@@ -1,5 +1,9 @@
 package com.innerman.emotracker.web.data;
 
+import com.innerman.emotracker.utils.EmoException;
+import com.innerman.emotracker.utils.ErrorType;
+import com.innerman.emotracker.utils.MessageProvider;
+
 import java.io.Serializable;
 
 /**
@@ -8,15 +12,15 @@ import java.io.Serializable;
  * Time: 22:39
  */
 
-public class Message implements Serializable {
+public class WebMessage implements Serializable {
 
     private MessageState state;
     private String message;
     private Object result;
 
-    public static Message createOK(Object result) {
+    public static WebMessage createOK(Object result) {
 
-        Message mes = new Message();
+        WebMessage mes = new WebMessage();
 
         mes.setState(MessageState.OK);
         mes.setResult(result);
@@ -24,14 +28,33 @@ public class Message implements Serializable {
         return mes;
     }
 
-    public static Message createError(String error) {
+    public static WebMessage createError(String error) {
 
-        Message mes = new Message();
+        WebMessage mes = new WebMessage();
 
         mes.setState(MessageState.ERROR);
         mes.setMessage(error);
 
         return mes;
+    }
+
+    public static WebMessage createError(ErrorType type) {
+
+        String message = null;
+        try {
+            message = MessageProvider.getMessage(type);
+            return createError(message);
+        }
+        catch (Exception e) {
+
+        }
+
+        return createError(message);
+    }
+
+    public static WebMessage createError(EmoException e) {
+
+        return createError(e.getErrorType());
     }
 
     public MessageState getState() {

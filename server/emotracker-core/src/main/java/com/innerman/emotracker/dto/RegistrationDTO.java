@@ -2,6 +2,8 @@ package com.innerman.emotracker.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * User: petrpopov
  * Date: 27.02.14
@@ -11,15 +13,19 @@ import org.hibernate.validator.constraints.NotBlank;
 public class RegistrationDTO {
 
     @NotBlank
+    @NotNull
     private String fullName;
 
     @NotBlank
+    @NotNull
     private String userName;
 
     @NotBlank
+    @NotNull
     private String password;
 
     @NotBlank
+    @NotNull
     private String email;
 
     public String getFullName() {

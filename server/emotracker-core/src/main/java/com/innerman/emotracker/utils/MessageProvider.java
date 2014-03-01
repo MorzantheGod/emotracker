@@ -3,6 +3,7 @@ package com.innerman.emotracker.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,19 @@ public class MessageProvider implements MessageSourceAware {
 
     public static String getMessage(String key) {
 
-        String message = messageSource.getMessage(key, null, new Locale("ru", "RU"));
+        String message;
+        try {
+            message = messageSource.getMessage(key, null, new Locale("ru", "RU"));
+        }
+        catch (NoSuchMessageException e) {
+
+            try {
+                message = messageSource.getMessage(key, null, Locale.US);
+            }
+            catch (NoSuchMessageException e1) {
+                return null;
+            }
+        }
         return message;
     }
 
