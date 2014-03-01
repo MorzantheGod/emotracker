@@ -9,6 +9,8 @@
     <RootNamespace>Emotracker.Core</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>Emotracker.Core</AssemblyName>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,8 +41,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="LoginService.cs" />
-    <Compile Include="LoginDTO.cs" />
-    <Compile Include="RegistrationService.cs" />
+    <Compile Include="Model\LoginDTO.cs" />
+    <Compile Include="Model\RegistrationDTO.cs" />
+    <Compile Include="Model\OperationResult.cs" />
+    <Compile Include="Service\LoginService.cs" />
+    <Compile Include="Service\RegistrationService.cs" />
   </ItemGroup>
 </Project>
