@@ -11,11 +11,16 @@ namespace Emotracker.iOS
 	public partial class LoginViewController : UIViewController
 	{
 		LoadingOverlay loadingOverlay;
+		public static UIStoryboard Storyboard = UIStoryboard.FromName ("Main", null);
+		public static UIViewController resultsViewController;
 
-		public event EventHandler InitialActionCompleted;
+		public LoginViewController() : base()
+		{
+		}
 
 		public LoginViewController (IntPtr handle) : base (handle)
 		{
+			resultsViewController = Storyboard.InstantiateViewController("ResultsViewController") as UIViewController;
 		}
 
 		public override void ViewDidLoad ()
@@ -34,7 +39,12 @@ namespace Emotracker.iOS
 
 				return true;
 			};
+
+			this.loginButton.TouchUpInside += (object sender, EventArgs e) => {
+				doLogin();
+			};
 		}
+
 
 		public void doLogin() 
 		{
@@ -42,14 +52,14 @@ namespace Emotracker.iOS
 			loadingOverlay = new LoadingOverlay (UIScreen.MainScreen.Bounds, "Signing in..");
 			View.Add (loadingOverlay);
 
-			Boolean res = LoginService.login(getLoginData());
+			OperationResult res = LoginService.login(getLoginData());
 
 			loadingOverlay.Hide();
-			if (res == false) {
-				loginMessageLabel.Text = "Sorry, password is incorrect..";
+			if (res.Result == false) {
+				loginMessageLabel.Text = res.Message;
 				messageView.Hidden = false;
 			} else {
-				InitialActionCompleted.Invoke (this, new EventArgs ());
+				this.PresentViewController (resultsViewController, true, null);
 			}
 		}
 
