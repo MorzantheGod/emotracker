@@ -35,6 +35,7 @@ namespace Emotracker.iOS
 
 			UserDTO dto = StorageService.getUserData ();
 			if (dto != null) {
+				//initialViewController = Storyboard.InstantiateInitialViewController () as UIViewController;
 				initialViewController = Storyboard.InstantiateViewController ("ResultsViewController") as UIViewController;
 			} else {
 				initialViewController = Storyboard.InstantiateInitialViewController () as UIViewController;
