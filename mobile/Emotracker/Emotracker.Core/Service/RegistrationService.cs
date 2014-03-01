@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Emotracker.Core
 {
@@ -8,8 +8,8 @@ namespace Emotracker.Core
 		{
 		}
 
-		public static Boolean registerNewUser(RegistrationDTO dto) {
-			return true;
+		public static OperationResult registerNewUser(RegistrationDTO dto) {
+			return new OperationResult(true, "OK");
 		}
 	}
 }
