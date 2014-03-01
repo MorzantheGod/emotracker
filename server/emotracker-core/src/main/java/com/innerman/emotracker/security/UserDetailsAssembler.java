@@ -25,10 +25,10 @@ public class UserDetailsAssembler {
     {
         String username = this.getUsername(user);
         String password = this.getPassword(user);
-        return buildUser(user, username, password);
+        return buildUser(user, username, password, user.getSalt());
     }
 
-    private UserDetails buildUser(UserEntity user, String username, String password) {
+    private UserDetails buildUser(UserEntity user, String username, String password, String salt) {
 
         boolean enabled = true;
         boolean accountNonExpired = true;
@@ -81,7 +81,7 @@ public class UserDetailsAssembler {
             return user.getFacebookId();
         }  */
 
-        return user.getId();
+        return user.getUserName();
     }
 
     private String getPassword(UserEntity user) {

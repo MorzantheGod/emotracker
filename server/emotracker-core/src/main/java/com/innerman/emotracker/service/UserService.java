@@ -91,6 +91,15 @@ public class UserService extends GenericService<UserEntity> {
         return saved;
     }
 
+    public UserEntity getUserByUsernameOrEmail(String username) {
+
+        UserEntity entity = this.getUserByEmail(username);
+        if( entity == null ) {
+            entity = this.getUserByUsername(username);
+        }
+        return entity;
+    }
+
     public UserEntity getUserByUsername(String username) {
         Criteria criteria = Criteria.where(USERNAME_FIELD).is(username);
         Query query = new Query(criteria);

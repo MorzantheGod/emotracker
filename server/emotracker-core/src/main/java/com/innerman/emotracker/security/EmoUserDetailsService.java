@@ -26,6 +26,9 @@ public class EmoUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity user = userService.getUserByUsername(username);
+        if( user == null ) {
+            user = userService.getUserByEmail(username);
+        }
 
         return convertUser(user);
     }

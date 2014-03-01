@@ -1,12 +1,16 @@
 package com.innerman.emotracker.web.service;
 
 
+import com.innerman.emotracker.dto.LoginDTO;
 import com.innerman.emotracker.dto.RegistrationDTO;
 import com.innerman.emotracker.model.UserEntity;
 import com.innerman.emotracker.service.UserService;
 import com.innerman.emotracker.utils.EmoException;
+import com.innerman.emotracker.utils.ErrorType;
 import com.innerman.emotracker.web.data.WebMessage;
+import com.innerman.emotracker.web.security.WebLoginManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +32,9 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private WebLoginManager loginManager;
+
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
@@ -44,6 +51,29 @@ public class UsersController {
         } catch (EmoException e) {
             e.printStackTrace();
             return WebMessage.createError(e);
+        }
+    }
+
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public Object loginUser(@Valid LoginDTO dto, BindingResult result) {
+
+        if( result.hasErrors() ) {
+            return WebMessage.createValidationError();
+        }
+
+        UserEntity entity = userService.getUserByUsernameOrEmail(dto.getUserName());
+        if( entity == null ) {
+            return WebMessage.createError(ErrorType.no_such_user);
+        }
+
+        try {
+            loginManager.authenticate(dto.getUserName(), dto.getPassword());
+            return WebMessage.createOK(entity);
+        }
+        catch (BadCredentialsException e) {
+            return WebMessage.createError("ERROR");
         }
     }
 }

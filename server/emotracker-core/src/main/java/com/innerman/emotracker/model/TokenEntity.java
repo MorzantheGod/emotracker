@@ -20,6 +20,7 @@ public class TokenEntity {
 
     private Boolean eternal;
     private Date validTo;
+    private Boolean valid;
 
     public TokenEntity() {
     }
@@ -28,6 +29,7 @@ public class TokenEntity {
         this.key = key;
         this.token = token;
         this.eternal = Boolean.TRUE;
+        this.valid = Boolean.TRUE;
     }
 
     public String getId() {
@@ -68,5 +70,13 @@ public class TokenEntity {
 
     public void setValidTo(Date validTo) {
         this.validTo = validTo;
+    }
+
+    public Boolean getValid() {
+        return valid;
+    }
+
+    public void setValid(Boolean valid) {
+        this.valid = valid;
     }
 }
