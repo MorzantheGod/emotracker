@@ -20,6 +20,7 @@ namespace Emotracker.iOS
 		public static UIViewController initialViewController;
 
 		public static UIViewController mainViewController;
+		private CoreStorageService storageService = new CoreStorageService ();
 
 		//
 		// This method is invoked when the application has loaded and is ready to run. In this
@@ -33,7 +34,7 @@ namespace Emotracker.iOS
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			root = new UIViewController ();
 
-			UserDTO dto = StorageService.getUserData ();
+			UserDTO dto = storageService.getUserData ();
 			if (dto != null) {
 				//initialViewController = Storyboard.InstantiateInitialViewController () as UIViewController;
 				initialViewController = Storyboard.InstantiateViewController ("ResultsViewController") as UIViewController;

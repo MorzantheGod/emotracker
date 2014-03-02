@@ -51,6 +51,7 @@ namespace Emotracker.Core
 				ans = JsonConvert.DeserializeObject<WebMessage> (response.Content);
 			}
 			catch( Exception ex ) {
+				Console.WriteLine (ex.Message);
 				return getErrorWebMessage ();
 			}
 

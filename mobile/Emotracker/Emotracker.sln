@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emotracker.iOS", "Emotracke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emotracker.Core", "Emotracker.Core\Emotracker.Core.csproj", "{4B6887F2-A2D9-4388-BD88-7E34D26DD6F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emotracker.Core.Droid", "Emotracker.Core.Droid\Emotracker.Core.Droid.csproj", "{E2531770-62A6-4C8F-B622-3D6C7A94448A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emotracker.Droid", "Emotracker.Droid\Emotracker.Droid.csproj", "{E9120342-EF2A-46AC-A033-08BFE12E6BD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -39,8 +43,32 @@ Global
 		{5935A031-0164-4B35-983C-141B16B65E35}.Release|iPhone.Build.0 = Release|iPhone
 		{5935A031-0164-4B35-983C-141B16B65E35}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{5935A031-0164-4B35-983C-141B16B65E35}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Release|iPhone.Build.0 = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{E2531770-62A6-4C8F-B622-3D6C7A94448A}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Release|iPhone.Build.0 = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{E9120342-EF2A-46AC-A033-08BFE12E6BD2}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Emotracker.iOS\Emotracker.iOS.csproj
+		StartupItem = Emotracker.Droid\Emotracker.Droid.csproj
 	EndGlobalSection
 EndGlobal

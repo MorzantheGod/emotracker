@@ -41,9 +41,11 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Components\json.net-4.5.11\lib\ios\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleStorage.iOS">
-      <HintPath>..\Components\simple-storage-1.2\lib\ios\SimpleStorage.iOS.dll</HintPath>
+    <Reference Include="SQLite">
+      <HintPath>..\Components\sqlite-net-1.0.1\lib\ios\SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />
@@ -63,7 +65,8 @@
     <Compile Include="ApiService\UserApiService.cs" />
     <Compile Include="Model\TokenDTO.cs" />
     <Compile Include="Model\UserDTO.cs" />
-    <Compile Include="Service\StorageService.cs" />
+    <Compile Include="Service\CoreStorageService.cs" />
+    <Compile Include="Model\UserEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="restsharp">
@@ -74,9 +77,8 @@
       <Version>4.5.11</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
-    <XamarinComponentReference Include="simple-storage">
-      <InstallationInProgress>True</InstallationInProgress>
-      <Version>1.2</Version>
+    <XamarinComponentReference Include="sqlite-net">
+      <Version>1.0.1</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

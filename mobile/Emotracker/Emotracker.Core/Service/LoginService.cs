@@ -6,6 +6,7 @@ namespace Emotracker.Core
 	public class LoginService
 	{
 		private UserApiService userApiService = new UserApiService ();
+		private CoreStorageService storageService = new CoreStorageService();
 
 		public OperationResult login(LoginDTO dto)
 		{
@@ -15,7 +16,7 @@ namespace Emotracker.Core
 			if (mes.Result != null) {
 				userDto = JsonConvert.DeserializeObject<UserDTO> (mes.Result.ToString ());
 
-				StorageService.saveUserData (userDto);
+				storageService.saveUserData (userDto);
 			}
 
 

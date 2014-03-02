@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E2531770-62A6-4C8F-B622-3D6C7A94448A}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Emotracker.Core.Droid</RootNamespace>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <AssemblyName>Emotracker.Core.Droid</AssemblyName>
+    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;__MOBILE__;__ANDROID__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>__MOBILE__;__ANDROID__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="SQLite">
+      <HintPath>..\Components\sqlite-net-1.0.1\lib\android\SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Components\json.net-4.5.11\lib\android\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.MonoDroid">
+      <HintPath>..\Components\restsharp-104.1.0\lib\android\RestSharp.MonoDroid.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="..\Emotracker.Core\ApiService\ApiService.cs">
+      <Link>ApiService\ApiService.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\ApiService\TokenApiService.cs">
+      <Link>ApiService\TokenApiService.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\ApiService\UserApiService.cs">
+      <Link>ApiService\UserApiService.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\LoginDTO.cs">
+      <Link>Model\LoginDTO.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\OperationResult.cs">
+      <Link>Model\OperationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\RegistrationDTO.cs">
+      <Link>Model\RegistrationDTO.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\TokenDTO.cs">
+      <Link>Model\TokenDTO.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\UserDTO.cs">
+      <Link>Model\UserDTO.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\UserEntity.cs">
+      <Link>Model\UserEntity.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Model\WebMessage.cs">
+      <Link>Model\WebMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Service\CoreStorageService.cs">
+      <Link>Service\CoreStorageService.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Service\LoginService.cs">
+      <Link>Service\LoginService.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Service\RegistrationService.cs">
+      <Link>Service\RegistrationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Emotracker.Core\Utils\MessageConverter.cs">
+      <Link>Utils\MessageConverter.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutResources.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\Strings.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ItemGroup>
+    <XamarinComponentReference Include="sqlite-net">
+      <Version>1.0.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="json.net">
+      <Version>4.5.11</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="restsharp">
+      <Version>104.1.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ApiService\" />
+    <Folder Include="Model\" />
+    <Folder Include="Service\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+</Project>
