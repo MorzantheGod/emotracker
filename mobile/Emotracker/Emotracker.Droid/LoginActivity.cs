@@ -31,6 +31,11 @@ namespace Emotracker.Droid
 					StartActivity (typeof(ResultsActivity));
 				}
 			};
+
+			var regButton = FindViewById<Button> (Resource.Id.registerButton);
+			regButton.Click += (sender, e) => {
+				StartActivity (typeof(RegistrationActivity));
+			};
 		}
 
 		protected LoginDTO getLoginDTO() {

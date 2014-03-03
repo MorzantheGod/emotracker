@@ -60,7 +60,7 @@ namespace Emotracker.Core
 
 		private WebMessage getErrorWebMessage() {
 			WebMessage mes = new WebMessage ();
-			mes.State = MessageConverter.ERROR_RESULT;
+			mes.State = WebMessage.ERROR_RESULT;
 			mes.Message = "Sorry, some problems with a server";
 			return mes;
 		}

@@ -66,8 +66,17 @@ namespace Emotracker.Droid
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f060009
+			public const int email = 2131099657;
+			
 			// aapt resource value: 0x7f060000
 			public const int emailField = 2131099648;
+			
+			// aapt resource value: 0x7f060007
+			public const int fullName = 2131099655;
+			
+			// aapt resource value: 0x7f060005
+			public const int linearLayout1 = 2131099653;
 			
 			// aapt resource value: 0x7f060002
 			public const int loginButton = 2131099650;
@@ -75,11 +84,23 @@ namespace Emotracker.Droid
 			// aapt resource value: 0x7f060004
 			public const int myButton = 2131099652;
 			
+			// aapt resource value: 0x7f06000a
+			public const int password = 2131099658;
+			
 			// aapt resource value: 0x7f060001
 			public const int passwordField = 2131099649;
 			
 			// aapt resource value: 0x7f060003
 			public const int registerButton = 2131099651;
+			
+			// aapt resource value: 0x7f06000b
+			public const int registrationButton = 2131099659;
+			
+			// aapt resource value: 0x7f060006
+			public const int textView1 = 2131099654;
+			
+			// aapt resource value: 0x7f060008
+			public const int userName = 2131099656;
 			
 			static Id()
 			{
@@ -101,7 +122,10 @@ namespace Emotracker.Droid
 			public const int Main = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int Results = 2130903042;
+			public const int Registration = 2130903042;
+			
+			// aapt resource value: 0x7f030003
+			public const int Results = 2130903043;
 			
 			static Layout()
 			{

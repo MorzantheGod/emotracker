@@ -4,9 +4,6 @@ namespace Emotracker.Core
 {
 	public class MessageConverter
 	{
-		public static readonly string OK_RESULT = "OK";
-		public static readonly string ERROR_RESULT = "ERROR";
-
 		public static OperationResult fromWebMessage(WebMessage message) 
 		{
 			OperationResult res = new OperationResult ();
@@ -14,9 +11,9 @@ namespace Emotracker.Core
 			res.Content = message.Result;
 			res.Message = message.Message;
 
-			if (message.State == OK_RESULT) {
+			if (message.State == WebMessage.OK_RESULT) {
 				res.Result = true;
-			} else if (message.State == ERROR_RESULT) {
+			} else if (message.State == WebMessage.ERROR_RESULT) {
 				res.Result = false;
 			}
 

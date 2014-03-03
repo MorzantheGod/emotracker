@@ -13,6 +13,10 @@ namespace Emotracker.Core
 		public string Key { get; set;}
 		public string Token { get; set; }
 
+		public RegistrationDTO()
+		{
+		}
+
 		public RegistrationDTO (string FullName, string UserName, string Password, string Email)
 		{
 			this.Email = Email;
