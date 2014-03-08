@@ -67,6 +67,7 @@
     <Compile Include="Model\UserDTO.cs" />
     <Compile Include="Service\CoreStorageService.cs" />
     <Compile Include="Model\UserEntity.cs" />
+    <Compile Include="BluetoothManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="restsharp">

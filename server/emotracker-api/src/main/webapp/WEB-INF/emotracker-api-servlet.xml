@@ -17,13 +17,18 @@
     <context:annotation-config/>
     <mvc:annotation-driven/>
 
+    <mvc:annotation-driven validator="globalValidator" />
+
+    <mvc:resources mapping="/resources/**"
+                   location="/resources/" />
+
 
     <bean id="globalValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
-    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
     </bean>
 
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
                 <bean class = "org.springframework.http.converter.StringHttpMessageConverter">
@@ -40,6 +45,16 @@
                         </list>
                     </property>
                 </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/views.xml</value>
             </list>
         </property>
     </bean>

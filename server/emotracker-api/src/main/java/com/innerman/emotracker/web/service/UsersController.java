@@ -35,6 +35,18 @@ public class UsersController {
     @Autowired
     private WebLoginManager loginManager;
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ResponseBody
+    public Object testAPI() {
+
+        try {
+            userService.findById("-1");
+            return "true";
+        }
+        catch (Exception e) {
+            return "false";
+        }
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
