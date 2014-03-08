@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.innerman.emotracker.R;
+import com.innerman.emotracker.config.AppSettings;
 import com.innerman.emotracker.model.MessageState;
 import com.innerman.emotracker.model.RegistrationDTO;
 import com.innerman.emotracker.model.TokenMessage;
@@ -33,6 +34,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppSettings.loadConfig( getResources() );
 
         setContentView(R.layout.activity_main);
         setTitle("Sign up");
@@ -71,6 +74,8 @@ public class MainActivity extends ActionBarActivity {
                 if( !valid ) {
                     return;
                 }
+
+                setFormEnabled(false);
 
                 UserHttpRequestTask task = new UserHttpRequestTask();
                 task.execute(null);
@@ -164,6 +169,13 @@ public class MainActivity extends ActionBarActivity {
         passwordField.setError(null);
     }
 
+    protected void setFormEnabled(boolean flag) {
+        fullnameField.setEnabled(flag);
+        usernameField.setEnabled(flag);
+        emailField.setEnabled(flag);
+        passwordField.setEnabled(flag);
+    }
+
     protected void showMessage(String message) {
 
         Context context = getApplicationContext();
@@ -228,6 +240,7 @@ public class MainActivity extends ActionBarActivity {
 
             if( !webMessage.getState().equals(MessageState.OK)) {
                 showMessage(webMessage.getMessage());
+                setFormEnabled(true);
             }
             else {
                 //show resultsActivity

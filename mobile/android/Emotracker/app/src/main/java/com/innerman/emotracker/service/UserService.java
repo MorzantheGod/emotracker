@@ -3,35 +3,34 @@ package com.innerman.emotracker.service;
 import com.innerman.emotracker.model.RegistrationDTO;
 import com.innerman.emotracker.model.WebMessage;
 
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 /**
  * Created by petrpopov on 08.03.14.
  */
-public class UserService {
+public class UserService extends ApiService<WebMessage> {
 
-    private String API_URL = "http://euve35609.startvps.com:8080/emotracker-api/api/users/";
+    private String API_URL = "users";
+    private final String CREATE_USER = "create";
+    private final String TEST_USER = "test";
+
+    public UserService() {
+        super(WebMessage.class);
+    }
 
     public WebMessage testUser() {
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-
-        String url = API_URL + "test";
-
-        WebMessage res = restTemplate.getForObject(url, WebMessage.class);
-        return res;
+        WebMessage test = this.getForObject(TEST_USER);
+        return test;
     }
 
     public WebMessage signUpUser(RegistrationDTO dto) {
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
+        WebMessage createUser = this.postForObject(CREATE_USER, dto);
 
-        String url = API_URL + "create";
+        return createUser;
+    }
 
-        WebMessage res = restTemplate.postForObject(url, dto, WebMessage.class);
-        return res;
+    @Override
+    protected String getCurrentApiUrl() {
+        return API_URL;
     }
 }

@@ -46,7 +46,12 @@ public class UserService extends GenericService<UserEntity> {
 
         UserEntity byEmail = getUserByEmail(dto.getEmail());
         if( byEmail != null ) {
-            throw new EmoException(ErrorType.user_already_exists);
+            throw new EmoException(ErrorType.email_already_exists);
+        }
+
+        UserEntity byUsername = getUserByUsername(dto.getUserName());
+        if( byUsername != null ) {
+            throw new EmoException(ErrorType.username_already_exists);
         }
 
         UserEntity userToSave = new UserEntity();

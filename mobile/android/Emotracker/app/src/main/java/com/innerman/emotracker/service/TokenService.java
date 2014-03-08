@@ -2,24 +2,26 @@ package com.innerman.emotracker.service;
 
 import com.innerman.emotracker.model.TokenMessage;
 
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 /**
  * Created by petrpopov on 08.03.14.
  */
-public class TokenService {
+public class TokenService extends ApiService<TokenMessage> {
 
-    private String API_URL = "http://euve35609.startvps.com:8080/emotracker-api/api/tokens/";
+    private String API_URL = "tokens";
+    private final String CREATE_USER = "create";
+
+    public TokenService() {
+        super(TokenMessage.class);
+    }
 
     public TokenMessage createToken() {
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
+        TokenMessage tokenMessage = this.postForObject(CREATE_USER, null);
+        return tokenMessage;
+    }
 
-        String url = API_URL + "create";
-
-        TokenMessage res = restTemplate.postForObject(url, null, TokenMessage.class);
-        return res;
+    @Override
+    protected String getCurrentApiUrl() {
+        return API_URL;
     }
 }
