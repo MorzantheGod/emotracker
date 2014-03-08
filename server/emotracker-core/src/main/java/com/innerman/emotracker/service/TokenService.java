@@ -47,6 +47,7 @@ public class TokenService extends GenericService<TokenEntity> {
         entity.setKey(key);
         entity.setToken(token);
         entity.setEternal(Boolean.TRUE);
+        entity.setValid(Boolean.TRUE);
 
         op.save(entity);
         TokenEntity byKey = getTokenByKey(key);

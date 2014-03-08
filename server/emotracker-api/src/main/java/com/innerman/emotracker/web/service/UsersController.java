@@ -41,10 +41,10 @@ public class UsersController {
 
         try {
             userService.findById("-1");
-            return "true";
+            return WebMessage.createOK("OK");
         }
         catch (Exception e) {
-            return "false";
+            return WebMessage.createError(e.getMessage());
         }
     }
 
