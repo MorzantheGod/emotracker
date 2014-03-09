@@ -11,6 +11,19 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/fullnameField"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Full name"
+        android:singleLine="true"
+        android:inputType="textCapWords|textPersonName" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/usernameField"
         android:layout_alignParentTop="true"
@@ -21,19 +34,6 @@
         android:layout_alignEnd="@+id/fullnameField"
         android:hint="Username"
         android:singleLine="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fullnameField"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Full name"
-        android:singleLine="true"
-        android:inputType="textPersonName" />
 
     <EditText
         android:layout_width="wrap_content"
