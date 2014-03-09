@@ -3,11 +3,11 @@ package com.innerman.emotracker.model;
 /**
  * Created by petrpopov on 08.03.14.
  */
-public class WebMessage {
+public class WebMessage<T> {
 
     protected MessageState state;
     protected String message;
-    protected Object result;
+    protected T result;
 
     public MessageState getState() {
         return state;
@@ -25,11 +25,11 @@ public class WebMessage {
         this.message = message;
     }
 
-    public Object getResult() {
+    public T getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(T result) {
         this.result = result;
     }
 }

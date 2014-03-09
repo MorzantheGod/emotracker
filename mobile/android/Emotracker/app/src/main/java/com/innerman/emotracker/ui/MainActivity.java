@@ -19,7 +19,7 @@ import com.innerman.emotracker.R;
 import com.innerman.emotracker.config.AppSettings;
 import com.innerman.emotracker.model.MessageState;
 import com.innerman.emotracker.model.RegistrationDTO;
-import com.innerman.emotracker.model.TokenMessage;
+import com.innerman.emotracker.model.TokenDTO;
 import com.innerman.emotracker.model.WebMessage;
 import com.innerman.emotracker.service.TokenService;
 import com.innerman.emotracker.service.UserService;
@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
     private EditText usernameField;
     private EditText emailField;
     private EditText passwordField;
+    private Button signupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
         AppSettings.loadConfig( getResources() );
 
         setContentView(R.layout.activity_main);
-        setTitle("Sign up");
+        setTitle(getString(R.string.title_activity_main));
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -52,18 +53,18 @@ public class MainActivity extends ActionBarActivity {
         super.onPostCreate(savedInstanceState);
 
         fullnameField = (EditText) findViewById(R.id.fullnameField);
-        fullnameField.addTextChangedListener(new EmptyTextWatcher(fullnameField, "Fullname cannot be empty"));
+        fullnameField.addTextChangedListener(new EmptyTextWatcher(fullnameField, getString(R.string.fullname_not_null)));
 
         usernameField = (EditText) findViewById(R.id.usernameField);
-        usernameField.addTextChangedListener(new EmptyTextWatcher(usernameField, "Username cannot be empty"));
+        usernameField.addTextChangedListener(new EmptyTextWatcher(usernameField, getString(R.string.username_not_null)));
 
         emailField = (EditText) findViewById(R.id.emailField);
-        emailField.addTextChangedListener(new EmptyTextWatcher(emailField, "Email cannot be empty"));
+        emailField.addTextChangedListener(new EmptyTextWatcher(emailField, getString(R.string.email_not_null)));
 
         passwordField = (EditText) findViewById(R.id.passwordField);
-        passwordField.addTextChangedListener(new EmptyTextWatcher(passwordField, "Password cannot be empty"));
+        passwordField.addTextChangedListener(new EmptyTextWatcher(passwordField, getString(R.string.password_not_null)));
 
-        Button signupButton = (Button) findViewById(R.id.signupButton);
+        signupButton = (Button) findViewById(R.id.signupButton);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,8 +78,8 @@ public class MainActivity extends ActionBarActivity {
 
                 setFormEnabled(false);
 
-                UserHttpRequestTask task = new UserHttpRequestTask();
-                task.execute(null);
+                SignUpHttpRequestTask task = new SignUpHttpRequestTask();
+                task.execute();
             }
         });
     }
@@ -108,49 +109,49 @@ public class MainActivity extends ActionBarActivity {
         int count = 0;
 
         if( fullnameField.getText() == null ) {
-            fullnameField.setError("Fullname cannot be empty");
+            fullnameField.setError(getString(R.string.fullname_not_null));
             count++;
         }
         else {
-            String s = fullnameField.getText().toString();
+            String s = fullnameField.getText().toString().trim();
             if( s == null || s.length() <= 0 ) {
-                fullnameField.setError("Fullname cannot be empty");
+                fullnameField.setError(getString(R.string.fullname_not_null));
                 count++;
             }
         }
 
         if( usernameField.getText() == null ) {
-            usernameField.setError("Username cannot be empty");
+            usernameField.setError(getString(R.string.username_not_null));
             count++;
         }
         else {
-            String s = usernameField.getText().toString();
+            String s = usernameField.getText().toString().trim();
             if( s == null || s.length() <= 0 ) {
-                usernameField.setError("Username cannot be empty");
+                usernameField.setError(getString(R.string.username_not_null));
                 count++;
             }
         }
 
         if( emailField.getText() == null ) {
-            emailField.setError("Email cannot be empty");
+            emailField.setError(getString(R.string.email_not_null));
             count++;
         }
         else {
-            String s = emailField.getText().toString();
+            String s = emailField.getText().toString().trim();
             if( s == null || s.length() <= 0 ) {
-                emailField.setError("Email cannot be empty");
+                emailField.setError(getString(R.string.email_not_null));
                 count++;
             }
         }
 
         if( passwordField.getText() == null ) {
-            passwordField.setError("Password cannot be empty");
+            passwordField.setError(getString(R.string.password_not_null));
             count++;
         }
         else {
-            String s = passwordField.getText().toString();
+            String s = passwordField.getText().toString().trim();
             if( s == null || s.length() <= 0 ) {
-                passwordField.setError("Password cannot be empty");
+                passwordField.setError(getString(R.string.password_not_null));
                 count++;
             }
         }
@@ -174,6 +175,7 @@ public class MainActivity extends ActionBarActivity {
         usernameField.setEnabled(flag);
         emailField.setEnabled(flag);
         passwordField.setEnabled(flag);
+        signupButton.setEnabled(flag);
     }
 
     protected void showMessage(String message) {
@@ -194,22 +196,22 @@ public class MainActivity extends ActionBarActivity {
         RegistrationDTO dto = new RegistrationDTO();
 
         if( fullnameField.getText() != null ) {
-            dto.setFullName(fullnameField.getText().toString());
+            dto.setFullName(fullnameField.getText().toString().trim() );
         }
         if( usernameField.getText() != null ) {
-            dto.setUserName( usernameField.getText().toString() );
+            dto.setUserName( usernameField.getText().toString().trim() );
         }
         if( emailField.getText() != null ) {
-            dto.setEmail( emailField.getText().toString() );
+            dto.setEmail( emailField.getText().toString().trim() );
         }
         if( passwordField.getText() != null ) {
-            dto.setPassword( passwordField.getText().toString() );
+            dto.setPassword( passwordField.getText().toString().trim() );
         }
 
         return dto;
     }
 
-    public class UserHttpRequestTask extends AsyncTask<Void, Void, WebMessage> {
+    public class SignUpHttpRequestTask extends AsyncTask<Void, Void, WebMessage> {
 
         private UserService userService = new UserService();
         private TokenService tokenService = new TokenService();
@@ -219,15 +221,19 @@ public class MainActivity extends ActionBarActivity {
 
             WebMessage res = new WebMessage();
 
-            TokenMessage token = tokenService.createToken();
+            WebMessage<TokenDTO> token = tokenService.createToken();
             if( token.getState().equals(MessageState.OK) ) {
 
                 RegistrationDTO dto = getRegistrationDTO();
-                dto.setTokenId( token.getResult().getId() );
+                dto.setTokenId(token.getResult().getId());
                 dto.setKey( token.getResult().getKey() );
-                dto.setToken( token.getResult().getToken() );
+                dto.setToken(token.getResult().getToken());
 
                 res = userService.signUpUser(dto);
+            }
+            else {
+                res.setState(token.getState());
+                res.setMessage(token.getMessage());
             }
 
 
@@ -244,7 +250,7 @@ public class MainActivity extends ActionBarActivity {
             }
             else {
                 //show resultsActivity
-                showMessage("YARR!");
+                showMessage(getString(R.string.yarr));
             }
         }
     }

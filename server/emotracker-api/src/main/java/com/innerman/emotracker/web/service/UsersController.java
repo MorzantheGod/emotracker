@@ -70,7 +70,7 @@ public class UsersController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public Object loginUser(@Valid LoginDTO dto, BindingResult result) {
+    public Object loginUser(@Valid @RequestBody LoginDTO dto, BindingResult result) {
 
         if( result.hasErrors() ) {
             return WebMessage.createValidationError();

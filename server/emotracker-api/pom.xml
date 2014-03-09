@@ -122,7 +122,7 @@
     </dependencies>
 
     <build>
-        <finalName>emotracker-api-${version}</finalName>
+        <finalName>emotracker-api-${project.version}</finalName>
 
         <plugins>
             <plugin>
@@ -144,6 +144,47 @@
                     <packaging>war</packaging>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.1.2</version>
+                <configuration>
+                    <container>
+                        <containerId>glassfish3x</containerId>
+                        <type>remote</type>
+                    </container>
+                    <configuration>
+                        <type>runtime</type>
+                        <properties>
+                            <cargo.hostname>euve35609.startvps.com</cargo.hostname>
+                            <cargo.remote.username>admin</cargo.remote.username>
+                            <cargo.remote.password>s9EZYX2Xj</cargo.remote.password>
+                        </properties>
+                    </configuration>
+                    <deployer>
+                        <type>remote</type>
+                        <deployables>
+                            <deployable>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <type>war</type>
+                                <properties>
+                                    <context>${project.artifactId}</context>
+                                </properties>
+                            </deployable>
+                        </deployables>
+                    </deployer>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.glassfish.deployment</groupId>
+                        <artifactId>deployment-client</artifactId>
+                        <version>3.2-b06</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
 
         <resources>

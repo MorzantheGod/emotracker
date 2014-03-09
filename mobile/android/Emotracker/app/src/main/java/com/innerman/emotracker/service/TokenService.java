@@ -1,23 +1,24 @@
 package com.innerman.emotracker.service;
 
-import com.innerman.emotracker.model.TokenMessage;
+import com.innerman.emotracker.model.TokenDTO;
+import com.innerman.emotracker.model.WebMessage;
 
 /**
  * Created by petrpopov on 08.03.14.
  */
-public class TokenService extends ApiService<TokenMessage> {
+public class TokenService extends ApiService<TokenDTO> {
 
     private String API_URL = "tokens";
     private final String CREATE_USER = "create";
 
     public TokenService() {
-        super(TokenMessage.class);
+        super(TokenDTO.class);
     }
 
-    public TokenMessage createToken() {
+    public WebMessage<TokenDTO> createToken() {
 
-        TokenMessage tokenMessage = this.postForObject(CREATE_USER, null);
-        return tokenMessage;
+        WebMessage<TokenDTO> webMessage = this.postForObject(CREATE_USER, null);
+        return webMessage;
     }
 
     @Override

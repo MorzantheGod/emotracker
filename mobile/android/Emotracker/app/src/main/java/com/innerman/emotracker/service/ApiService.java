@@ -4,6 +4,7 @@ import com.innerman.emotracker.config.AppSettings;
 import com.innerman.emotracker.model.MessageState;
 import com.innerman.emotracker.model.WebMessage;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -16,11 +17,13 @@ public abstract class ApiService<T> {
     private String BASE_API_URL;
     private Class<T> domainClass;
 
+    private static final String UNAVAILABLE = "Server unavailable";
+
     public ApiService(Class<T> clazz) {
         this.domainClass = clazz;
     }
 
-    protected T getForObject(String endpoint) {
+    protected WebMessage<T> getForObject(String endpoint) {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
@@ -29,19 +32,15 @@ public abstract class ApiService<T> {
 
 
         try {
-            T object = (T) restTemplate.getForObject(url, domainClass);
-            return object;
+            WebMessage message = restTemplate.getForObject(url, WebMessage.class);
+            return getConvertedResult(message);
         }
         catch (RestClientException e) {
-            WebMessage res = new WebMessage();
-            res.setState(MessageState.ERROR);
-            res.setMessage("Server unavailable");
-
-            return (T)res;
+            return getErrorResult();
         }
     }
 
-    protected T postForObject(String endpoint, Object requestBodyObject) {
+    protected WebMessage<T> postForObject(String endpoint, Object requestBodyObject) {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
@@ -50,15 +49,33 @@ public abstract class ApiService<T> {
 
 
         try {
-            T t = restTemplate.postForObject(url, requestBodyObject, domainClass);
-            return t;
+            WebMessage message = restTemplate.postForObject(url, requestBodyObject, WebMessage.class);
+            return getConvertedResult(message);
         }
         catch (RestClientException e) {
-            WebMessage res = new WebMessage();
-            res.setState(MessageState.ERROR);
-            res.setMessage("Server unavailable");
-            return (T)res;
+            return getErrorResult();
         }
+    }
+
+    protected WebMessage<T> getConvertedResult(WebMessage message) {
+        WebMessage<T> res = new WebMessage<T>();
+        res.setMessage(message.getMessage());
+        res.setState(message.getState());
+
+        if( message.getResult() != null ) {
+            ObjectMapper mapper = new ObjectMapper();
+            T t = mapper.convertValue(message.getResult(), domainClass);
+            res.setResult(t);
+        }
+        return res;
+    }
+
+    protected WebMessage<T> getErrorResult() {
+        WebMessage<T> res = new WebMessage<T>();
+        res.setState(MessageState.ERROR);
+        res.setMessage(UNAVAILABLE);
+
+        return res;
     }
 
     protected String constructUrlForEndpoint(String endpoint) {

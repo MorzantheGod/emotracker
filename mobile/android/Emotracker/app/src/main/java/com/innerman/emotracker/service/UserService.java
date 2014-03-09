@@ -1,19 +1,22 @@
 package com.innerman.emotracker.service;
 
+import com.innerman.emotracker.model.LoginDTO;
 import com.innerman.emotracker.model.RegistrationDTO;
+import com.innerman.emotracker.model.UserDTO;
 import com.innerman.emotracker.model.WebMessage;
 
 /**
  * Created by petrpopov on 08.03.14.
  */
-public class UserService extends ApiService<WebMessage> {
+public class UserService extends ApiService<UserDTO> {
 
-    private String API_URL = "users";
-    private final String CREATE_USER = "create";
-    private final String TEST_USER = "test";
+    private final static String API_URL = "users";
+    private final static String CREATE_USER = "create";
+    private final static String LOGIN_USER = "login";
+    private final static String TEST_USER = "test";
 
     public UserService() {
-        super(WebMessage.class);
+        super(UserDTO.class);
     }
 
     public WebMessage testUser() {
@@ -22,11 +25,18 @@ public class UserService extends ApiService<WebMessage> {
         return test;
     }
 
-    public WebMessage signUpUser(RegistrationDTO dto) {
+    public WebMessage<UserDTO> signUpUser(RegistrationDTO dto) {
 
-        WebMessage createUser = this.postForObject(CREATE_USER, dto);
+        WebMessage<UserDTO> createUser = this.postForObject(CREATE_USER, dto);
 
         return createUser;
+    }
+
+    public WebMessage<UserDTO> signInUser(LoginDTO dto) {
+
+        WebMessage<UserDTO> loginUser = this.postForObject(LOGIN_USER, dto);
+
+        return loginUser;
     }
 
     @Override
