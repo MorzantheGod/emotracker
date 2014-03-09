@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.config.AppSettings;
+import com.innerman.emotracker.config.UserDataStorage;
 import com.innerman.emotracker.model.LoginDTO;
 import com.innerman.emotracker.model.MessageState;
 import com.innerman.emotracker.model.UserDTO;
@@ -27,6 +28,8 @@ public class LoginActivity extends ActionBarActivity {
     private EditText passwordField;
     private Button signinButton;
     private Button signupButton;
+
+    private UserDataStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,14 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        storage = new UserDataStorage(getApplicationContext(), getString(R.string.config_name));
+        boolean userValid = storage.isUserValid();
+        if(userValid == true ) {
+            Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+            startActivity(intent);
+            return;
+        }
 
         emailField = (EditText) findViewById(R.id.emailField);
         emailField.addTextChangedListener(new EmptyTextWatcher(emailField, getString(R.string.email_not_null)));
@@ -168,6 +179,13 @@ public class LoginActivity extends ActionBarActivity {
             else {
                 //show resultsActivity
                 showMessage(getString(R.string.yarr));
+
+
+                storage.saveUser((UserDTO) webMessage.getResult());
+
+                //show results
+                Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+                startActivity(intent);
             }
         }
     }

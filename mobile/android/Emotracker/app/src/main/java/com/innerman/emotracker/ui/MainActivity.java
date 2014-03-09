@@ -1,6 +1,7 @@
 package com.innerman.emotracker.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.config.AppSettings;
+import com.innerman.emotracker.config.UserDataStorage;
 import com.innerman.emotracker.model.MessageState;
 import com.innerman.emotracker.model.RegistrationDTO;
 import com.innerman.emotracker.model.TokenDTO;
+import com.innerman.emotracker.model.UserDTO;
 import com.innerman.emotracker.model.WebMessage;
 import com.innerman.emotracker.service.TokenService;
 import com.innerman.emotracker.service.UserService;
@@ -31,6 +34,8 @@ public class MainActivity extends ActionBarActivity {
     private EditText emailField;
     private EditText passwordField;
     private Button signupButton;
+
+    private UserDataStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        storage = new UserDataStorage(getApplicationContext(), getString(R.string.config_name));
+        boolean userValid = storage.isUserValid();
+        if(userValid == true ) {
+            Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+            startActivity(intent);
+            return;
+        }
 
         fullnameField = (EditText) findViewById(R.id.fullnameField);
         fullnameField.addTextChangedListener(new EmptyTextWatcher(fullnameField, getString(R.string.fullname_not_null)));
@@ -251,6 +264,12 @@ public class MainActivity extends ActionBarActivity {
             else {
                 //show resultsActivity
                 showMessage(getString(R.string.yarr));
+
+                storage.saveUser((UserDTO) webMessage.getResult());
+
+                //show results
+                Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+                startActivity(intent);
             }
         }
     }
