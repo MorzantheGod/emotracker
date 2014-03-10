@@ -1,6 +1,10 @@
 package com.innerman.emotracker.bluetooth;
 
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
+import android.os.Message;
+
+import com.innerman.emotracker.model.SensorDTO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,16 +15,19 @@ import java.io.OutputStream;
  */
 public class BluetoothManagingThread extends Thread {
 
+    public static int READ_MESSAGE = 43;
+
     private final BluetoothSocket socket;
     private final InputStream in;
     private final OutputStream out;
 
     private PolarMessageParser parser;
+    private Handler readHandler;
 
-    public BluetoothManagingThread(BluetoothSocket socket) {
+    public BluetoothManagingThread(BluetoothSocket socket, Handler readHandler) {
 
         this.socket = socket;
-
+        this.readHandler = readHandler;
 
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
@@ -51,7 +58,12 @@ public class BluetoothManagingThread extends Thread {
                 bytes = in.read(buffer);
 
 
-                parser.parseBuffer(buffer);
+                SensorDTO dto = parser.parseBuffer(buffer);
+
+                Message msg = new Message();
+                msg.what = READ_MESSAGE;
+                msg.obj = dto;
+                readHandler.sendMessage(msg);
 
                 // Send the obtained bytes to the UI activity
                 //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();

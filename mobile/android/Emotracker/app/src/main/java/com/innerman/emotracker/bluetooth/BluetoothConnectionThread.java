@@ -3,6 +3,7 @@ package com.innerman.emotracker.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -22,11 +23,15 @@ public class BluetoothConnectionThread extends Thread  {
     private final BluetoothDevice device;
 
     private BluetoothAdapter bluetoothAdapter;
+    private BluetoothManagingThread connThread;
 
-    public BluetoothConnectionThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter) {
+    private Handler readHandler;
+
+    public BluetoothConnectionThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, Handler readHandler) {
 
         this.bluetoothAdapter = bluetoothAdapter;
         this.device = device;
+        this.readHandler = readHandler;
 
 
         BluetoothSocket tmp = null;
@@ -60,13 +65,17 @@ public class BluetoothConnectionThread extends Thread  {
             return;
         }
 
-        BluetoothManagingThread b = new BluetoothManagingThread(socket);
+        BluetoothManagingThread b = new BluetoothManagingThread(socket, readHandler);
+        connThread = b;
         b.start();
     }
 
     public void cancel() {
         try {
             socket.close();
+            if( connThread != null ) {
+                connThread.cancel();
+            }
         }
         catch (IOException e) {
         }

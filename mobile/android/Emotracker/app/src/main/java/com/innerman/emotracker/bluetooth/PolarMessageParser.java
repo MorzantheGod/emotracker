@@ -15,6 +15,8 @@
  */
 package com.innerman.emotracker.bluetooth;
 
+import com.innerman.emotracker.model.SensorDTO;
+
 /**
  * An implementation of a Sensor MessageParser for Polar Wearlink Bluetooth HRM.
  *
@@ -58,7 +60,7 @@ public class PolarMessageParser {
         return headerValid && checkbyteValid && sequenceValid;
     }
 
-    public Sensor parseBuffer(byte[] buffer) {
+    public SensorDTO parseBuffer(byte[] buffer) {
 
         int heartRate = 0;
         boolean heartrateValid = false;
@@ -82,32 +84,11 @@ public class PolarMessageParser {
         lastHeartRate = heartRate;                          // Remember good value for next time.
 
         // Heart Rate
-        Sensor sensor = new Sensor();
+        SensorDTO sensor = new SensorDTO();
         sensor.setHeartRate(heartRate);
         sensor.setTime(System.currentTimeMillis());
 
         return sensor;
-    }
-
-    public static final class Sensor {
-        private int heartRate;
-        private long time;
-
-        public int getHeartRate() {
-            return heartRate;
-        }
-
-        public void setHeartRate(int heartRate) {
-            this.heartRate = heartRate;
-        }
-
-        public long getTime() {
-            return time;
-        }
-
-        public void setTime(long time) {
-            this.time = time;
-        }
     }
 
     /**

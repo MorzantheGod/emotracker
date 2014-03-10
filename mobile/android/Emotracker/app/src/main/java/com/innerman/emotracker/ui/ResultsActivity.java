@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,16 +18,36 @@ import android.widget.TextView;
 
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.bluetooth.BluetoohManager;
+import com.innerman.emotracker.model.DeviceDTO;
+import com.innerman.emotracker.model.SensorDTO;
 
 public class ResultsActivity extends BaseActivity {
 
     private static final Integer REQUEST_ENABLE_BT = 42;
     private static final Integer REQUEST_ENABLE_BT_FROM_SCAN = 43;
 
-    private BluetoohManager bluetoohManager = new BluetoohManager();
+    private DeviceDTO connectedDevice;
 
     private Button scanButton;
     private TextView statusView;
+    private TextView deviceView;
+    private TextView pulseView;
+
+    private final Handler scanHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            handleScanResultMessage(msg);
+        }
+    };
+    private final Handler readHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            handleReadResultMessage(msg);
+        }
+    };
+    private BluetoohManager bluetoohManager = new BluetoohManager(scanHandler, readHandler);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +83,8 @@ public class ResultsActivity extends BaseActivity {
         });
 
         statusView = (TextView) findViewById(R.id.statusView);
+        deviceView = (TextView) findViewById(R.id.deviceView);
+        pulseView = (TextView) findViewById(R.id.pulseView);
     }
 
     @Override
@@ -83,7 +107,9 @@ public class ResultsActivity extends BaseActivity {
     }
 
     private void onScanButtonClick() {
-        boolean working = bluetoohManager.isWorking();
+        boolean working = bluetoohManager.isScanning();
+        boolean reading = bluetoohManager.isReading();
+
         if( !working ) {
 
             boolean enabled = checkForBluetoohEnabled(REQUEST_ENABLE_BT_FROM_SCAN);
@@ -92,10 +118,16 @@ public class ResultsActivity extends BaseActivity {
             }
         }
         else {
-            bluetoohManager.cancel();
+            if( reading ) {
+                bluetoohManager.cancelReading();
+            }
+            else {
+                bluetoohManager.cancelDiscovery();
 
-            scanButton.setText("Scan");
-            statusView.setText("Not connected");
+                scanButton.setText("Scan");
+                statusView.setText("Not connected");
+                deviceView.setText("");
+            }
         }
     }
 
@@ -130,6 +162,61 @@ public class ResultsActivity extends BaseActivity {
         registerReceiver(bluetoohManager, filter);
 
         bluetoohManager.startDiscovery();
+    }
+
+    private void handleScanResultMessage(Message msg) {
+        if( msg == null ) {
+            return;
+        }
+
+        int what = msg.what;
+        if( what != BluetoohManager.SCAN_MESSAGE ) {
+            return;
+        }
+
+        if( msg.obj == null ) {
+            return;
+        }
+
+        if( !(msg.obj instanceof DeviceDTO) ) {
+            return;
+        }
+
+        bluetoohManager.cancelDiscovery();
+
+        DeviceDTO dto = (DeviceDTO) msg.obj;
+        scanButton.setText("Scan");
+
+        if( statusView != null ) {
+            statusView.setText("Connected to: " + dto.getName());
+        }
+
+        if( deviceView != null ) {
+            deviceView.setText("MAC: " + dto.getMac());
+        }
+    }
+
+    private void handleReadResultMessage(Message msg) {
+        if( msg == null ) {
+            return;
+        }
+
+        int what = msg.what;
+        if( what != BluetoohManager.READ_MESSAGE ) {
+            return;
+        }
+
+        if( !(msg.obj instanceof SensorDTO) ) {
+            return;
+        }
+
+        SensorDTO dto = (SensorDTO) msg.obj;
+
+        System.out.println(dto);
+
+        if( pulseView != null ) {
+            pulseView.setText( String.valueOf(dto.getHeartRate()));
+        }
     }
 
     private void setFormEnabled(boolean flag) {

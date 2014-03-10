@@ -5,6 +5,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+
+import com.innerman.emotracker.model.DeviceDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +23,19 @@ public class BluetoohManager extends BroadcastReceiver {
     private Map<String, BluetoothDevice> devices = new HashMap<String, BluetoothDevice>();
     private BluetoothAdapter bluetoothAdapter;
 
-    private static final String POLAR = "Polar";
-    private boolean isWorking = false;
+    public static int SCAN_MESSAGE = 42;
+    public static int READ_MESSAGE = 43;
 
-    public BluetoohManager() {
+    private static final String POLAR = "Polar";
+    private boolean isScanning = false;
+    private boolean isReading = false;
+
+    private Handler scanHandler;
+    private Handler readHandler;
+
+    public BluetoohManager(Handler scanHandler, Handler readHandler) {
+        this.scanHandler = scanHandler;
+        this.readHandler = readHandler;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
@@ -53,10 +66,24 @@ public class BluetoohManager extends BroadcastReceiver {
 
                 bluetoothAdapter.cancelDiscovery();
 
-                BluetoothConnectionThread b = new BluetoothConnectionThread(device, bluetoothAdapter);
+                DeviceDTO dto = new DeviceDTO();
+                dto.setName(name);
+                dto.setMac(device.getAddress());
+
+                Message msg = new Message();
+                msg.what = SCAN_MESSAGE;
+                msg.obj = dto;
+                scanHandler.sendMessage(msg);
+
+                BluetoothConnectionThread b = new BluetoothConnectionThread(device, bluetoothAdapter, readHandler);
                 connThread = b;
                 b.start();
+                isReading = true;
             }
+        }
+        else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
+        {
+            bluetoothAdapter.cancelDiscovery();
         }
     }
 
@@ -88,7 +115,7 @@ public class BluetoohManager extends BroadcastReceiver {
 
     public void performBluetoothScan() {
 
-        isWorking = true;
+        isScanning = true;
 
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
@@ -103,23 +130,29 @@ public class BluetoohManager extends BroadcastReceiver {
         bluetoothAdapter.startDiscovery();
     }
 
-    public void cancel() {
-        isWorking = false;
+
+    public void cancelDiscovery() {
+        isScanning = false;
 
         if( bluetoothAdapter != null ) {
             bluetoothAdapter.cancelDiscovery();
         }
+    }
+
+    public void cancelReading() {
+        isReading = false;
 
         if( connThread != null ) {
             connThread.cancel();
         }
     }
 
-    public boolean isWorking() {
-        return isWorking;
+    public boolean isScanning() {
+        return isScanning;
     }
 
-    public void setWorking(boolean isWorking) {
-        this.isWorking = isWorking;
+    public boolean isReading() {
+        return isReading;
     }
+
 }
