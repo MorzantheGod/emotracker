@@ -1,17 +1,13 @@
 package com.innerman.emotracker.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.config.AppSettings;
@@ -22,7 +18,7 @@ import com.innerman.emotracker.model.UserDTO;
 import com.innerman.emotracker.model.WebMessage;
 import com.innerman.emotracker.service.UserService;
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends BaseActivity {
 
     private EditText emailField;
     private EditText passwordField;
@@ -190,16 +186,6 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-    protected void showMessage(String message) {
-
-        Context context = getApplicationContext();
-        CharSequence text = message;
-        int duration = Toast.LENGTH_LONG;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 70);
-        toast.show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,17 +1,31 @@
 package com.innerman.emotracker.ui;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.innerman.emotracker.R;
+import com.innerman.emotracker.bluetooth.BluetoohManager;
 
-public class ResultsActivity extends ActionBarActivity {
+public class ResultsActivity extends BaseActivity {
+
+    private static final Integer REQUEST_ENABLE_BT = 42;
+    private static final Integer REQUEST_ENABLE_BT_FROM_SCAN = 43;
+
+    private BluetoohManager bluetoohManager = new BluetoohManager();
+
+    private Button scanButton;
+    private TextView statusView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +39,108 @@ public class ResultsActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+
+        checkForBluetoothExistence();
+        checkForBluetoohEnabled(REQUEST_ENABLE_BT);
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        scanButton = (Button) findViewById(R.id.scanButton);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                onScanButtonClick();
+
+            }
+        });
+
+        statusView = (TextView) findViewById(R.id.statusView);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if( REQUEST_ENABLE_BT.equals(requestCode)) {
+            if(resultCode == RESULT_CANCELED) {
+                showMessage("You must enable Bluetooth for using this device");
+            }
+        }
+        else if( REQUEST_ENABLE_BT_FROM_SCAN.equals(requestCode) ) {
+            if(resultCode == RESULT_CANCELED) {
+                showMessage("You must enable Bluetooth for using this device");
+            }
+            else if( resultCode == RESULT_OK ) {
+                performScan();
+            }
+        }
+    }
+
+    private void onScanButtonClick() {
+        boolean working = bluetoohManager.isWorking();
+        if( !working ) {
+
+            boolean enabled = checkForBluetoohEnabled(REQUEST_ENABLE_BT_FROM_SCAN);
+            if( enabled ) {
+                performScan();
+            }
+        }
+        else {
+            bluetoohManager.cancel();
+
+            scanButton.setText("Scan");
+            statusView.setText("Not connected");
+        }
+    }
+
+    private void performScan() {
+        performBluetoothScan();
+        scanButton.setText("Stop");
+        statusView.setText("Searching...");
+    }
+
+    private void checkForBluetoothExistence() {
+        boolean exist = bluetoohManager.checkForBluetoothExistence();
+        if( !exist ) {
+            showMessage("Device does not support bluetooth :(");
+            setFormEnabled(false);
+        }
+    }
+
+    private boolean checkForBluetoohEnabled(int status) {
+        boolean enabled = bluetoohManager.checkForBluetoohEnabled();
+        if( !enabled ) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, status);
+        }
+
+        return enabled;
+    }
+
+    private void performBluetoothScan() {
+        bluetoohManager.performBluetoothScan();
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(bluetoohManager, filter);
+
+        bluetoohManager.startDiscovery();
+    }
+
+    private void setFormEnabled(boolean flag) {
+        scanButton.setEnabled(flag);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(bluetoohManager);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

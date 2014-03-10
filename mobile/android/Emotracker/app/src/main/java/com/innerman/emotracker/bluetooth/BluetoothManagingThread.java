@@ -1,0 +1,82 @@
+package com.innerman.emotracker.bluetooth;
+
+import android.bluetooth.BluetoothSocket;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+/**
+ * Created by petrpopov on 09.03.14.
+ */
+public class BluetoothManagingThread extends Thread {
+
+    private final BluetoothSocket socket;
+    private final InputStream in;
+    private final OutputStream out;
+
+    private PolarMessageParser parser;
+
+    public BluetoothManagingThread(BluetoothSocket socket) {
+
+        this.socket = socket;
+
+
+        InputStream tmpIn = null;
+        OutputStream tmpOut = null;
+
+        try {
+            tmpIn = socket.getInputStream();
+            tmpOut = socket.getOutputStream();
+        }
+        catch (IOException e) {
+        }
+
+        in = tmpIn;
+        out = tmpOut;
+    }
+
+    @Override
+    public void run() {
+
+        parser = new PolarMessageParser();
+
+        byte[] buffer = new byte[1024];  // buffer store for the stream
+        int bytes; // bytes returned from read()
+
+        // Keep listening to the InputStream until an exception occurs
+        while (true) {
+            try {
+                // Read from the InputStream
+                bytes = in.read(buffer);
+
+
+                parser.parseBuffer(buffer);
+
+                // Send the obtained bytes to the UI activity
+                //mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+            }
+            catch (IOException e) {
+                break;
+            }
+        }
+    }
+
+    /* Call this from the main activity to send data to the remote device */
+    public void write(byte[] bytes) {
+        try {
+            out.write(bytes);
+        }
+        catch (IOException e) {
+        }
+    }
+
+    /* Call this from the main activity to shutdown the connection */
+    public void cancel() {
+        try {
+            socket.close();
+        }
+        catch (IOException e) {
+        }
+    }
+}

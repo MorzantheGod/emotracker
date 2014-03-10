@@ -1,12 +1,9 @@
 package com.innerman.emotracker.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.config.AppSettings;
@@ -27,7 +23,7 @@ import com.innerman.emotracker.model.WebMessage;
 import com.innerman.emotracker.service.TokenService;
 import com.innerman.emotracker.service.UserService;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
 
     private EditText fullnameField;
     private EditText usernameField;
@@ -189,17 +185,6 @@ public class MainActivity extends ActionBarActivity {
         emailField.setEnabled(flag);
         passwordField.setEnabled(flag);
         signupButton.setEnabled(flag);
-    }
-
-    protected void showMessage(String message) {
-
-        Context context = getApplicationContext();
-        CharSequence text = message;
-        int duration = Toast.LENGTH_LONG;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 70);
-        toast.show();
     }
 
 
