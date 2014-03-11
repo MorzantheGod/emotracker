@@ -212,10 +212,22 @@ public class ResultsActivity extends BaseActivity {
 
         SensorDTO dto = (SensorDTO) msg.obj;
 
-        System.out.println(dto);
+        new Test(dto).run();
+    }
 
-        if( pulseView != null ) {
-            pulseView.setText( String.valueOf(dto.getHeartRate()));
+    private class Test implements Runnable {
+
+        private SensorDTO dto;
+
+        private Test(SensorDTO dto) {
+            this.dto = dto;
+        }
+
+        @Override
+        public void run() {
+            if( pulseView != null ) {
+                pulseView.setText( String.valueOf(dto.getHeartRate()));
+            }
         }
     }
 

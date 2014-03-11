@@ -61,11 +61,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Pulse Number"
+        android:text="Pulse"
         android:id="@+id/pulseView"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="48dp"
+        android:textStyle="bold"
+        android:textSize="52dp"
         android:layout_below="@+id/scanButton"
-        android:layout_toRightOf="@+id/textView2" />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
