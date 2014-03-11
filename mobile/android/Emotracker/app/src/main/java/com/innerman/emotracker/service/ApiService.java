@@ -63,9 +63,14 @@ public abstract class ApiService<T> {
         res.setState(message.getState());
 
         if( message.getResult() != null ) {
-            ObjectMapper mapper = new ObjectMapper();
-            T t = mapper.convertValue(message.getResult(), domainClass);
-            res.setResult(t);
+
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                T t = mapper.convertValue(message.getResult(), domainClass);
+                res.setResult(t);
+            }
+            catch (Exception e) {}
+
         }
         return res;
     }

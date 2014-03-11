@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,8 +19,15 @@ import android.widget.TextView;
 
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.bluetooth.BluetoohManager;
+import com.innerman.emotracker.config.UserDataStorage;
+import com.innerman.emotracker.model.DataDTO;
 import com.innerman.emotracker.model.DeviceDTO;
+import com.innerman.emotracker.model.MessageState;
 import com.innerman.emotracker.model.SensorDTO;
+import com.innerman.emotracker.model.TokenDTO;
+import com.innerman.emotracker.model.UserDTO;
+import com.innerman.emotracker.model.WebMessage;
+import com.innerman.emotracker.service.DataService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +65,7 @@ public class ResultsActivity extends BaseActivity {
     };
     private BluetoohManager bluetoohManager = new BluetoohManager(scanHandler, readHandler);
 
+    private UserDataStorage storage;
 
 
     @Override
@@ -80,6 +89,8 @@ public class ResultsActivity extends BaseActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        storage = new UserDataStorage(getApplicationContext(), getString(R.string.config_name));
 
         scanButton = (Button) findViewById(R.id.scanButton);
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +142,9 @@ public class ResultsActivity extends BaseActivity {
         else {
             if( reading ) {
                 bluetoohManager.cancelReading();
+
+                statusView.setText("Sending data to server...");
+                new SaveHttpRequestTask().execute(getDataDTO());
             }
             else {
                 bluetoohManager.cancelDiscovery();
@@ -201,6 +215,7 @@ public class ResultsActivity extends BaseActivity {
         bluetoohManager.cancelDiscovery();
 
         DeviceDTO dto = (DeviceDTO) msg.obj;
+        connectedDevice = dto;
 
         if( statusView != null ) {
             statusView.setText("Connected to: " + dto.getName());
@@ -274,6 +289,72 @@ public class ResultsActivity extends BaseActivity {
 
     private void setFormEnabled(boolean flag) {
         scanButton.setEnabled(flag);
+    }
+
+    private DataDTO getDataDTO() {
+
+        DataDTO dto = new DataDTO();
+
+        UserDTO user = storage.getUser();
+        dto.setUsername(user.getUserName());
+
+        List<TokenDTO> tokens = user.getTokens();
+        if( tokens != null ) {
+            if( !tokens.isEmpty() ) {
+                dto.setTokenValue(tokens.get(0).getToken());
+            }
+        }
+
+        dto.setData(new ArrayList<SensorDTO>());
+        for (SensorDTO result : results) {
+            dto.getData().add(result);
+        }
+
+
+        return dto;
+    }
+
+    protected class SaveHttpRequestTask extends AsyncTask<DataDTO, Void, WebMessage> {
+
+        private DataService dataService = new DataService();
+
+        @Override
+        protected WebMessage doInBackground(DataDTO... dataDTOs) {
+
+            setFormEnabled(false);
+
+            WebMessage<DataDTO> message = new WebMessage();
+
+            if(dataDTOs == null || dataDTOs.length <= 0 ) {
+                return message;
+            }
+
+            message = dataService.saveData(dataDTOs[0]);
+
+            return message;
+        }
+
+        @Override
+        protected void onPostExecute(WebMessage message) {
+            super.onPostExecute(message);
+
+            setFormEnabled(true);
+
+            if( !message.getState().equals(MessageState.OK)) {
+                showMessage(message.getMessage());
+            }
+            else {
+                //show resultsActivity
+                showMessage("Sent to server!");
+
+                if( connectedDevice != null ) {
+                    statusView.setText("Connected to: " + connectedDevice.getName());
+                }
+                else {
+                    statusView.setText("Not connected");
+                }
+            }
+        }
     }
 
     @Override
