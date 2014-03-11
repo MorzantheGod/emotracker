@@ -17,6 +17,8 @@ package com.innerman.emotracker.bluetooth;
 
 import com.innerman.emotracker.model.SensorDTO;
 
+import java.util.Date;
+
 /**
  * An implementation of a Sensor MessageParser for Polar Wearlink Bluetooth HRM.
  *
@@ -87,6 +89,8 @@ public class PolarMessageParser {
         SensorDTO sensor = new SensorDTO();
         sensor.setHeartRate(heartRate);
         sensor.setTime(System.currentTimeMillis());
+        Date d = new Date(System.currentTimeMillis());
+        sensor.setDate(d);
 
         return sensor;
     }

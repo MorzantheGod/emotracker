@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Status:"
-        android:id="@+id/textView2"
+        android:id="@+id/textView1"
         android:layout_above="@+id/textView"
         android:layout_toRightOf="@+id/scanButton" />
 
@@ -49,11 +49,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/deviceView
-        "
+        android:id="@+id/deviceView"
         android:layout_below="@+id/statusView"
         android:layout_alignLeft="@+id/statusView"
-        android:layout_alignStart="@+id/statusView"
+        android:layout_alignStart="@+id/statusView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAC:"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/statusView"
+        android:layout_alignLeft="@+id/deviceView"
+        android:layout_alignStart="@+id/deviceView"
         android:layout_alignRight="@+id/statusView"
         android:layout_alignEnd="@+id/statusView" />
 
@@ -63,11 +71,32 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Pulse"
         android:id="@+id/pulseView"
-        android:layout_marginTop="48dp"
-        android:textStyle="bold"
-        android:textSize="52dp"
+        android:layout_marginTop="38dp"
+        android:textSize="48dp"
         android:layout_below="@+id/scanButton"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maximum"
+        android:id="@+id/maximumView"
+        android:layout_below="@+id/pulseView"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Average"
+        android:id="@+id/averageView"
+        android:layout_below="@+id/maximumView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/maximumView"
+        android:layout_alignEnd="@+id/maximumView" />
 
 
 </RelativeLayout>

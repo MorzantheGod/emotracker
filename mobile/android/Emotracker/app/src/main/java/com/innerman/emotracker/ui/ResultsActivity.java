@@ -21,6 +21,11 @@ import com.innerman.emotracker.bluetooth.BluetoohManager;
 import com.innerman.emotracker.model.DeviceDTO;
 import com.innerman.emotracker.model.SensorDTO;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class ResultsActivity extends BaseActivity {
 
     private static final Integer REQUEST_ENABLE_BT = 42;
@@ -28,10 +33,15 @@ public class ResultsActivity extends BaseActivity {
 
     private DeviceDTO connectedDevice;
 
+    private SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+    private volatile List<SensorDTO> results = new ArrayList<SensorDTO>();
+
     private Button scanButton;
     private TextView statusView;
     private TextView deviceView;
     private TextView pulseView;
+    private TextView maximumView;
+    private TextView averageView;
 
     private final Handler scanHandler = new Handler() {
         @Override
@@ -76,15 +86,15 @@ public class ResultsActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-
                 onScanButtonClick();
-
             }
         });
 
         statusView = (TextView) findViewById(R.id.statusView);
         deviceView = (TextView) findViewById(R.id.deviceView);
         pulseView = (TextView) findViewById(R.id.pulseView);
+        maximumView = (TextView) findViewById(R.id.maximumView);
+        averageView = (TextView) findViewById(R.id.averageView);
     }
 
     @Override
@@ -110,10 +120,11 @@ public class ResultsActivity extends BaseActivity {
         boolean working = bluetoohManager.isScanning();
         boolean reading = bluetoohManager.isReading();
 
-        if( !working ) {
+        if( !working && !reading ) {
 
             boolean enabled = checkForBluetoohEnabled(REQUEST_ENABLE_BT_FROM_SCAN);
             if( enabled ) {
+                results = new ArrayList<SensorDTO>();
                 performScan();
             }
         }
@@ -124,10 +135,11 @@ public class ResultsActivity extends BaseActivity {
             else {
                 bluetoohManager.cancelDiscovery();
 
-                scanButton.setText("Scan");
                 statusView.setText("Not connected");
                 deviceView.setText("");
             }
+
+            scanButton.setText("Scan");
         }
     }
 
@@ -135,6 +147,19 @@ public class ResultsActivity extends BaseActivity {
         performBluetoothScan();
         scanButton.setText("Stop");
         statusView.setText("Searching...");
+    }
+
+    private void performBluetoothScan() {
+        Map<String,BluetoothDevice> devices = bluetoohManager.performBluetoothScan();
+        if( devices.isEmpty() ) {
+            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+            registerReceiver(bluetoohManager, filter);
+
+            bluetoohManager.startDiscovery();
+        }
+        else {
+            bluetoohManager.startReading();
+        }
     }
 
     private void checkForBluetoothExistence() {
@@ -153,15 +178,6 @@ public class ResultsActivity extends BaseActivity {
         }
 
         return enabled;
-    }
-
-    private void performBluetoothScan() {
-        bluetoohManager.performBluetoothScan();
-
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(bluetoohManager, filter);
-
-        bluetoohManager.startDiscovery();
     }
 
     private void handleScanResultMessage(Message msg) {
@@ -185,7 +201,6 @@ public class ResultsActivity extends BaseActivity {
         bluetoohManager.cancelDiscovery();
 
         DeviceDTO dto = (DeviceDTO) msg.obj;
-        scanButton.setText("Scan");
 
         if( statusView != null ) {
             statusView.setText("Connected to: " + dto.getName());
@@ -196,7 +211,7 @@ public class ResultsActivity extends BaseActivity {
         }
     }
 
-    private void handleReadResultMessage(Message msg) {
+    private synchronized void handleReadResultMessage(Message msg) {
         if( msg == null ) {
             return;
         }
@@ -211,24 +226,50 @@ public class ResultsActivity extends BaseActivity {
         }
 
         SensorDTO dto = (SensorDTO) msg.obj;
-
-        new Test(dto).run();
+        updateDisplay(dto);
     }
 
-    private class Test implements Runnable {
+    private void updateDisplay(SensorDTO dto) {
+        String val = String.valueOf(dto.getHeartRate());
+        String text = df.format(dto.getDate()) + " " + val;
 
-        private SensorDTO dto;
+        results.add(dto);
 
-        private Test(SensorDTO dto) {
-            this.dto = dto;
+        if( pulseView != null ) {
+            pulseView.setText( text );
         }
 
-        @Override
-        public void run() {
-            if( pulseView != null ) {
-                pulseView.setText( String.valueOf(dto.getHeartRate()));
+        if( maximumView != null ) {
+            maximumView.setText( "Maximum: " + String.valueOf(getMaximum()));
+        }
+
+        if( averageView != null ) {
+            averageView.setText( "Avarage: " + String.valueOf(getAverage()));
+        }
+    }
+
+    private synchronized int getMaximum() {
+
+        int max = 0;
+        for (SensorDTO result : results) {
+            int heartRate = result.getHeartRate();
+            if( max <= heartRate ) {
+                max = heartRate;
             }
         }
+
+        return max;
+    }
+
+    private synchronized int getAverage() {
+
+        int avg = 0;
+        for (SensorDTO result : results) {
+            avg += result.getHeartRate();
+        }
+
+        avg /= results.size();
+        return avg;
     }
 
     private void setFormEnabled(boolean flag) {

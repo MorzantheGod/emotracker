@@ -1,11 +1,15 @@
 package com.innerman.emotracker.model;
 
+import java.util.Date;
+
 /**
  * Created by petrpopov on 10.03.14.
  */
 public class SensorDTO {
+
     private int heartRate;
     private long time;
+    private Date date;
 
     public int getHeartRate() {
         return heartRate;
@@ -23,8 +27,16 @@ public class SensorDTO {
         this.time = time;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
-        return "heartRate=" + heartRate + ", time=" + time;
+        return "heartRate=" + heartRate + ", time=" + time + ", date=" + date;
     }
 }

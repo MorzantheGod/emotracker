@@ -66,19 +66,7 @@ public class BluetoohManager extends BroadcastReceiver {
 
                 bluetoothAdapter.cancelDiscovery();
 
-                DeviceDTO dto = new DeviceDTO();
-                dto.setName(name);
-                dto.setMac(device.getAddress());
-
-                Message msg = new Message();
-                msg.what = SCAN_MESSAGE;
-                msg.obj = dto;
-                scanHandler.sendMessage(msg);
-
-                BluetoothConnectionThread b = new BluetoothConnectionThread(device, bluetoothAdapter, readHandler);
-                connThread = b;
-                b.start();
-                isReading = true;
+                startReadingFromDevice(device);
             }
         }
         else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
@@ -113,7 +101,7 @@ public class BluetoohManager extends BroadcastReceiver {
         return true;
     }
 
-    public void performBluetoothScan() {
+    public Map<String, BluetoothDevice> performBluetoothScan() {
 
         isScanning = true;
 
@@ -124,12 +112,42 @@ public class BluetoohManager extends BroadcastReceiver {
                 devices.put(device.getName(), device);
             }
         }
+
+        return devices;
     }
 
     public void startDiscovery() {
         bluetoothAdapter.startDiscovery();
     }
 
+    public DeviceDTO startReading() {
+        for (Map.Entry<String, BluetoothDevice> entry : this.devices.entrySet()) {
+            String key = entry.getKey();
+            if( key.contains(POLAR)) {
+                return startReadingFromDevice(entry.getValue());
+            }
+        }
+
+        return null;
+    }
+
+    private DeviceDTO startReadingFromDevice(BluetoothDevice device) {
+        DeviceDTO dto = new DeviceDTO();
+        dto.setName(device.getName());
+        dto.setMac(device.getAddress());
+
+        Message msg = new Message();
+        msg.what = SCAN_MESSAGE;
+        msg.obj = dto;
+        scanHandler.sendMessage(msg);
+
+        BluetoothConnectionThread b = new BluetoothConnectionThread(device, bluetoothAdapter, readHandler);
+        connThread = b;
+        b.start();
+        isReading = true;
+
+        return dto;
+    }
 
     public void cancelDiscovery() {
         isScanning = false;
