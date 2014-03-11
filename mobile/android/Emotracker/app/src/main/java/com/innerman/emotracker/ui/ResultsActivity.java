@@ -346,13 +346,13 @@ public class ResultsActivity extends BaseActivity {
             else {
                 //show resultsActivity
                 showMessage("Sent to server!");
+            }
 
-                if( connectedDevice != null ) {
-                    statusView.setText("Connected to: " + connectedDevice.getName());
-                }
-                else {
-                    statusView.setText("Not connected");
-                }
+            if( connectedDevice != null ) {
+                statusView.setText("Connected to: " + connectedDevice.getName());
+            }
+            else {
+                statusView.setText("Not connected");
             }
         }
     }
