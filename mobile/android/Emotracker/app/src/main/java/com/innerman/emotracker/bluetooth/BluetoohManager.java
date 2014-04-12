@@ -9,8 +9,12 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.innerman.emotracker.model.DeviceDTO;
+import com.innerman.emotracker.model.SensorDTO;
+import com.innerman.emotracker.ui.ScanActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,20 +30,111 @@ public class BluetoohManager extends BroadcastReceiver {
     public static int SCAN_MESSAGE = 42;
     public static int READ_MESSAGE = 43;
 
-    private static final String POLAR = "Polar";
+    private static final String DEVICE_NAME = "H-C-2010-06-01";
     private boolean isScanning = false;
     private boolean isReading = false;
 
     private Handler scanHandler;
     private Handler readHandler;
+    private Handler curStateHandler;
+    private ScanActivity scanActivity;
 
+
+    private BluetoothConnectionThread connThread;
+    private volatile List<SensorDTO> results = new ArrayList<SensorDTO>();
+
+    public BluetoohManager(ScanActivity scanActivity) {
+        this.scanActivity = scanActivity;
+
+        scanHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                BluetoohManager.this.scanActivity.handleScanResultMessage(msg);
+            }
+        };
+
+
+        readHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                BluetoohManager.this.scanActivity.handleReadResultMessage(msg);
+            }
+        };
+
+        curStateHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                BluetoohManager.this.scanActivity.handleCurrentStateMessage(msg);
+            }
+        };
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    }
+
+    @Deprecated
     public BluetoohManager(Handler scanHandler, Handler readHandler) {
         this.scanHandler = scanHandler;
         this.readHandler = readHandler;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
-    private BluetoothConnectionThread connThread;
+    public void toggleScanOrAddDevice() {
+
+        boolean working = isScanning();
+        boolean reading = isReading();
+
+        if( !working && !reading ) {
+
+            boolean enabled = checkForBluetoohEnabled();
+            if( enabled ) {
+                results = new ArrayList<SensorDTO>();
+
+                sendCurrentStateMessage(BluetoothManagerState.START_SCAN);
+
+                Map<String, BluetoothDevice> devices = performBluetoothScan();
+                if( devices.isEmpty() ) {
+                    sendCurrentStateMessage(BluetoothManagerState.DEVICE_NOT_FOUND);
+
+                    startDiscovery();
+                }
+//                else {
+//                    startReading();
+//                }
+            }
+            else {
+
+            }
+        }
+        else {
+            if( reading ) {
+                cancelReading();
+
+                sendCurrentStateMessage(BluetoothManagerState.CANCEL_READ);
+            }
+            else {
+                cancelDiscovery();
+
+                sendCurrentStateMessage(BluetoothManagerState.CANCEL_DISCOVERY);
+
+            }
+
+          //  addButton.setText("Scan");
+        }
+    }
+
+    private void sendCurrentStateMessage(BluetoothManagerState state) {
+
+        sendCurrentStateMessage(state, null);
+    }
+
+    private void sendCurrentStateMessage(BluetoothManagerState state, Object obj) {
+
+        Message msg = new Message();
+        msg.what = state.getValue();
+        msg.obj = obj;
+
+        curStateHandler.sendMessage(msg);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -54,19 +149,22 @@ public class BluetoohManager extends BroadcastReceiver {
         if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
+            if( device == null ) {
+                return;
+            }
 
             String name = device.getName();
             if( name == null ) {
                 return;
             }
 
-            if( name.contains(POLAR)) {
+            if( name.contains(DEVICE_NAME)) {
                 deviceNames.put(device.getName(), device.getAddress());
                 devices.put(device.getName(), device);
 
                 bluetoothAdapter.cancelDiscovery();
 
-                startReadingFromDevice(device);
+                sendCurrentStateMessage(BluetoothManagerState.DEVICE_FOUND, new DeviceDTO(device.getName(), device.getAddress()));
             }
         }
         else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
@@ -108,8 +206,11 @@ public class BluetoohManager extends BroadcastReceiver {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                deviceNames.put(device.getName(), device.getAddress());
-                devices.put(device.getName(), device);
+
+                if( device.getName() != null && device.getName().contains(DEVICE_NAME)) {
+                    deviceNames.put(device.getName(), device.getAddress());
+                    devices.put(device.getName(), device);
+                }
             }
         }
 
@@ -123,7 +224,7 @@ public class BluetoohManager extends BroadcastReceiver {
     public DeviceDTO startReading() {
         for (Map.Entry<String, BluetoothDevice> entry : this.devices.entrySet()) {
             String key = entry.getKey();
-            if( key.contains(POLAR)) {
+            if( key.contains(DEVICE_NAME)) {
                 return startReadingFromDevice(entry.getValue());
             }
         }

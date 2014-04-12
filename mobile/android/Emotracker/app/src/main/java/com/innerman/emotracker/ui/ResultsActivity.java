@@ -114,12 +114,12 @@ public class ResultsActivity extends BaseActivity {
 
         if( REQUEST_ENABLE_BT.equals(requestCode)) {
             if(resultCode == RESULT_CANCELED) {
-                showMessage("You must enable Bluetooth for using this device");
+                showMessage(getString(R.string.bt_enable));
             }
         }
         else if( REQUEST_ENABLE_BT_FROM_SCAN.equals(requestCode) ) {
             if(resultCode == RESULT_CANCELED) {
-                showMessage("You must enable Bluetooth for using this device");
+                showMessage(getString(R.string.bt_enable));
             }
             else if( resultCode == RESULT_OK ) {
                 performScan();

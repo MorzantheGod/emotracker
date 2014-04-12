@@ -8,6 +8,14 @@ public class DeviceDTO {
     private String name;
     private String mac;
 
+    public DeviceDTO() {
+    }
+
+    public DeviceDTO(String name, String mac) {
+        this.name = name;
+        this.mac = mac;
+    }
+
     public String getName() {
         return name;
     }

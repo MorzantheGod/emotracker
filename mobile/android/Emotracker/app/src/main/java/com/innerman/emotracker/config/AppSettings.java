@@ -13,6 +13,9 @@ import java.util.Properties;
  */
 public class AppSettings {
 
+    public static final Integer REQUEST_ENABLE_BT = 42;
+    public static final Integer REQUEST_ENABLE_BT_FROM_SCAN = 43;
+
     public static String APP_SERVER_HOST;
     public static String APP_SERVER_PORT;
     public static String APP_SERVER_API;

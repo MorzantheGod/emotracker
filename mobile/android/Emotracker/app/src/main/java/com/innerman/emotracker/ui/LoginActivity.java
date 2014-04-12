@@ -44,7 +44,7 @@ public class LoginActivity extends BaseActivity {
         storage = new UserDataStorage(getApplicationContext(), getString(R.string.config_name));
         boolean userValid = storage.isUserValid();
         if(userValid == true ) {
-            Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DeviceActivity.class);
             startActivity(intent);
             return;
         }
@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
                 startActivity(intent);
             }
         });
@@ -180,7 +180,7 @@ public class LoginActivity extends BaseActivity {
                 storage.saveUser((UserDTO) webMessage.getResult());
 
                 //show results
-                Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), DeviceActivity.class);
                 startActivity(intent);
             }
         }

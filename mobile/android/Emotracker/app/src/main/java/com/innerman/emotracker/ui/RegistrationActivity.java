@@ -23,7 +23,7 @@ import com.innerman.emotracker.model.WebMessage;
 import com.innerman.emotracker.service.TokenService;
 import com.innerman.emotracker.service.UserService;
 
-public class MainActivity extends BaseActivity {
+public class RegistrationActivity extends BaseActivity {
 
     private EditText fullnameField;
     private EditText usernameField;
