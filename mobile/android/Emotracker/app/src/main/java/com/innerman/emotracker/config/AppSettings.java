@@ -13,6 +13,8 @@ import java.util.Properties;
  */
 public class AppSettings {
 
+    public static final Integer READ_MESSAGE = 43;
+
     public static final Integer REQUEST_ENABLE_BT = 42;
     public static final Integer REQUEST_ENABLE_BT_FROM_SCAN = 43;
 

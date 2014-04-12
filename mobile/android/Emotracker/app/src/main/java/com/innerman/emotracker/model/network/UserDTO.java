@@ -1,4 +1,4 @@
-package com.innerman.emotracker.model;
+package com.innerman.emotracker.model.network;
 
 import java.util.List;
 

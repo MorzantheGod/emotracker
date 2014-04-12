@@ -15,7 +15,7 @@
  */
 package com.innerman.emotracker.bluetooth;
 
-import com.innerman.emotracker.model.SensorDTO;
+import com.innerman.emotracker.model.device.SensorDTO;
 
 import java.util.Date;
 

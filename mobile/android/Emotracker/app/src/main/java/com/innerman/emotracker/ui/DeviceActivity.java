@@ -16,7 +16,8 @@ import com.innerman.emotracker.R;
 import com.innerman.emotracker.bluetooth.BluetoohManager;
 import com.innerman.emotracker.bluetooth.BluetoothManagerState;
 import com.innerman.emotracker.config.AppSettings;
-import com.innerman.emotracker.model.DeviceDTO;
+import com.innerman.emotracker.model.device.DartaSensorDTO;
+import com.innerman.emotracker.model.network.DeviceDTO;
 
 public class DeviceActivity extends BaseActivity implements ScanActivity {
 
@@ -24,6 +25,8 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
     private Button recordButton;
     private TextView statusView;
     private TextView addDeviceView;
+    private TextView dateView;
+    private TextView pulseView;
 
     private BluetoohManager bluetoohManager = new BluetoohManager(this);
 
@@ -55,6 +58,8 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
         statusView = (TextView) findViewById(R.id.statusView);
         addDeviceView = (TextView) findViewById(R.id.addDeviceView);
+        dateView = (TextView) findViewById(R.id.dateView);
+        pulseView = (TextView) findViewById(R.id.pulseView);
 
         checkFormComponents();
     }
@@ -96,9 +101,34 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         return enabled;
     }
 
+    private volatile int globalCounter = -1;
+
     @Override
     public void handleReadResultMessage(Message msg) {
 
+        if( msg == null  ) {
+            return;
+        }
+
+        if( msg.what != AppSettings.READ_MESSAGE ) {
+            return;
+        }
+
+        if( msg.obj == null ) {
+            return;
+        }
+
+        if( !(msg.obj instanceof DartaSensorDTO ) ) {
+            return;
+        }
+
+        synchronized (this) {
+            DartaSensorDTO dto = (DartaSensorDTO) msg.obj;
+            if( globalCounter < dto.getCounter() || dto.getCounter() == 0 ) {
+                pulseView.setText("Pulse: " + dto.getCounter() );
+                globalCounter = dto.getCounter();
+            }
+        }
     }
 
     @Override
@@ -214,7 +244,16 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         @Override
         public void onClick(View view) {
 
-            bluetoohManager.startReading();
+            if( !bluetoohManager.isReading() ) {
+                recordButton.setText(getString(R.string.bt_stop));
+
+                bluetoohManager.startReading();
+            }
+            else {
+                recordButton.setText(getString(R.string.bt_record));
+
+                bluetoohManager.cancelReading();
+            }
         }
     }
 

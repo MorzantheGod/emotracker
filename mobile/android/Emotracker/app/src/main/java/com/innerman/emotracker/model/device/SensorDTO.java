@@ -1,10 +1,12 @@
-package com.innerman.emotracker.model;
+package com.innerman.emotracker.model.device;
 
 import java.util.Date;
 
 /**
  * Created by petrpopov on 10.03.14.
  */
+
+@Deprecated
 public class SensorDTO {
 
     private int heartRate;

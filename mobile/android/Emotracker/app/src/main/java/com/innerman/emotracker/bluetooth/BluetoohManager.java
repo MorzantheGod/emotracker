@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
-import com.innerman.emotracker.model.DeviceDTO;
-import com.innerman.emotracker.model.SensorDTO;
+import com.innerman.emotracker.model.device.SensorDTO;
+import com.innerman.emotracker.model.network.DeviceDTO;
 import com.innerman.emotracker.ui.ScanActivity;
 
 import java.lang.reflect.Method;
@@ -44,7 +44,7 @@ public class BluetoohManager extends BroadcastReceiver {
     private ScanActivity scanActivity;
 
 
-    private BluetoothConnectionPolarThread connThread;
+    private BluetoothConnectionThread connThread;
     private volatile List<SensorDTO> results = new ArrayList<SensorDTO>();
 
     public BluetoohManager(ScanActivity scanActivity) {
@@ -287,7 +287,7 @@ public class BluetoohManager extends BroadcastReceiver {
         msg.obj = dto;
         scanHandler.sendMessage(msg);
 
-        BluetoothConnectionPolarThread b = new BluetoothConnectionPolarThread(device, bluetoothAdapter, readHandler);
+        BluetoothConnectionThread b = new BluetoothConnectionThread(device, bluetoothAdapter, readHandler);
         connThread = b;
         b.start();
         isReading = true;

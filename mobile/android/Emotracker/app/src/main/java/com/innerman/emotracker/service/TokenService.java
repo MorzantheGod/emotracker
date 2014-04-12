@@ -1,7 +1,7 @@
 package com.innerman.emotracker.service;
 
-import com.innerman.emotracker.model.TokenDTO;
-import com.innerman.emotracker.model.WebMessage;
+import com.innerman.emotracker.model.network.TokenDTO;
+import com.innerman.emotracker.model.network.WebMessage;
 
 /**
  * Created by petrpopov on 08.03.14.

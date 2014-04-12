@@ -1,4 +1,4 @@
-package com.innerman.emotracker.model;
+package com.innerman.emotracker.model.network;
 
 /**
  * Created by petrpopov on 08.03.14.

@@ -1,4 +1,4 @@
-package com.innerman.emotracker.model;
+package com.innerman.emotracker.model.network;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 

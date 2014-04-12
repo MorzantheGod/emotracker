@@ -12,10 +12,10 @@ import android.widget.EditText;
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.config.AppSettings;
 import com.innerman.emotracker.config.UserDataStorage;
-import com.innerman.emotracker.model.LoginDTO;
-import com.innerman.emotracker.model.MessageState;
-import com.innerman.emotracker.model.UserDTO;
-import com.innerman.emotracker.model.WebMessage;
+import com.innerman.emotracker.model.network.LoginDTO;
+import com.innerman.emotracker.model.network.MessageState;
+import com.innerman.emotracker.model.network.UserDTO;
+import com.innerman.emotracker.model.network.WebMessage;
 import com.innerman.emotracker.service.UserService;
 
 public class LoginActivity extends BaseActivity {

@@ -1,8 +1,8 @@
 package com.innerman.emotracker.service;
 
 import com.innerman.emotracker.config.AppSettings;
-import com.innerman.emotracker.model.MessageState;
-import com.innerman.emotracker.model.WebMessage;
+import com.innerman.emotracker.model.network.MessageState;
+import com.innerman.emotracker.model.network.WebMessage;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;

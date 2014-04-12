@@ -1,4 +1,6 @@
-package com.innerman.emotracker.model;
+package com.innerman.emotracker.model.network;
+
+import com.innerman.emotracker.model.device.SensorDTO;
 
 import java.util.List;
 

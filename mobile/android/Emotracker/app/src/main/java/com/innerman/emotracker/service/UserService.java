@@ -1,9 +1,9 @@
 package com.innerman.emotracker.service;
 
-import com.innerman.emotracker.model.LoginDTO;
-import com.innerman.emotracker.model.RegistrationDTO;
-import com.innerman.emotracker.model.UserDTO;
-import com.innerman.emotracker.model.WebMessage;
+import com.innerman.emotracker.model.network.LoginDTO;
+import com.innerman.emotracker.model.network.RegistrationDTO;
+import com.innerman.emotracker.model.network.UserDTO;
+import com.innerman.emotracker.model.network.WebMessage;
 
 /**
  * Created by petrpopov on 08.03.14.

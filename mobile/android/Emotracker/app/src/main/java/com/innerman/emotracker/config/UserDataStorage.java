@@ -2,9 +2,9 @@ package com.innerman.emotracker.config;
 
 import android.content.Context;
 
-import com.innerman.emotracker.model.TokenDTO;
-import com.innerman.emotracker.model.UserDTO;
-import com.innerman.emotracker.model.UserRoleDTO;
+import com.innerman.emotracker.model.network.TokenDTO;
+import com.innerman.emotracker.model.network.UserDTO;
+import com.innerman.emotracker.model.network.UserRoleDTO;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -22,6 +22,7 @@
     <string name="bt_not_support">Device does not support bluetooth :(</string>
     <string name="bt_scan">Scan</string>
     <string name="bt_stop">Stop</string>
+    <string name="bt_record">Record!</string>
     <string name="bt_searching">Searching...</string>
     <string name="bt_not_connected">Not connected</string>
     <string name="bt_connected_to">Connected to: </string>

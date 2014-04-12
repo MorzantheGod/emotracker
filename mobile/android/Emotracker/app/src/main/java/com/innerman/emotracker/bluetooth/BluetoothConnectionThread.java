@@ -12,8 +12,7 @@ import java.util.UUID;
  * Created by petrpopov on 09.03.14.
  */
 
-@Deprecated
-public class BluetoothConnectionPolarThread extends Thread  {
+public class BluetoothConnectionThread extends Thread  {
 
     //SPP profile
     //https://stackoverflow.com/questions/4032391/android-bluetooth-where-can-i-get-uuid
@@ -25,11 +24,11 @@ public class BluetoothConnectionPolarThread extends Thread  {
     private final BluetoothDevice device;
 
     private BluetoothAdapter bluetoothAdapter;
-    private BluetoothManagingPolarThread connThread;
+    private BluetoothManagingThread connThread;
 
     private Handler readHandler;
 
-    public BluetoothConnectionPolarThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, Handler readHandler) {
+    public BluetoothConnectionThread(BluetoothDevice device, BluetoothAdapter bluetoothAdapter, Handler readHandler) {
 
         this.bluetoothAdapter = bluetoothAdapter;
         this.device = device;
@@ -67,7 +66,7 @@ public class BluetoothConnectionPolarThread extends Thread  {
             return;
         }
 
-        BluetoothManagingPolarThread b = new BluetoothManagingPolarThread(socket, readHandler);
+        BluetoothManagingThread b = new BluetoothManagingThread(socket, readHandler);
         connThread = b;
         b.start();
     }
