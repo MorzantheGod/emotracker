@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class ResultsActivity extends BaseActivity {
 
     private static final Integer REQUEST_ENABLE_BT = 42;

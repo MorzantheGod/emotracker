@@ -13,7 +13,9 @@ import java.io.OutputStream;
 /**
  * Created by petrpopov on 09.03.14.
  */
-public class BluetoothManagingThread extends Thread {
+
+@Deprecated
+public class BluetoothManagingPolarThread extends Thread {
 
     public static int READ_MESSAGE = 43;
 
@@ -24,7 +26,7 @@ public class BluetoothManagingThread extends Thread {
     private PolarMessageParser parser;
     private Handler readHandler;
 
-    public BluetoothManagingThread(BluetoothSocket socket, Handler readHandler) {
+    public BluetoothManagingPolarThread(BluetoothSocket socket, Handler readHandler) {
 
         this.socket = socket;
         this.readHandler = readHandler;

@@ -12,6 +12,8 @@ import com.innerman.emotracker.model.DeviceDTO;
 import com.innerman.emotracker.model.SensorDTO;
 import com.innerman.emotracker.ui.ScanActivity;
 
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,8 @@ public class BluetoohManager extends BroadcastReceiver {
     public static int SCAN_MESSAGE = 42;
     public static int READ_MESSAGE = 43;
 
+    private static final String PAIRING_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
+
     private static final String DEVICE_NAME = "H-C-2010-06-01";
     private boolean isScanning = false;
     private boolean isReading = false;
@@ -40,7 +44,7 @@ public class BluetoohManager extends BroadcastReceiver {
     private ScanActivity scanActivity;
 
 
-    private BluetoothConnectionThread connThread;
+    private BluetoothConnectionPolarThread connThread;
     private volatile List<SensorDTO> results = new ArrayList<SensorDTO>();
 
     public BluetoohManager(ScanActivity scanActivity) {
@@ -80,10 +84,10 @@ public class BluetoohManager extends BroadcastReceiver {
 
     public void toggleScanOrAddDevice() {
 
-        boolean working = isScanning();
+        boolean scanning = isScanning();
         boolean reading = isReading();
 
-        if( !working && !reading ) {
+        if( !scanning && !reading ) {
 
             boolean enabled = checkForBluetoohEnabled();
             if( enabled ) {
@@ -93,16 +97,18 @@ public class BluetoohManager extends BroadcastReceiver {
 
                 Map<String, BluetoothDevice> devices = performBluetoothScan();
                 if( devices.isEmpty() ) {
-                    sendCurrentStateMessage(BluetoothManagerState.DEVICE_NOT_FOUND);
+                    sendCurrentStateMessage(BluetoothManagerState.START_DISCOVERY);
 
                     startDiscovery();
                 }
-//                else {
-//                    startReading();
-//                }
+                else {
+                    isScanning = false;
+
+                    sendCurrentStateMessage(BluetoothManagerState.DEVICE_FOUND, getMainDevice() );
+                }
             }
             else {
-
+                sendCurrentStateMessage(BluetoothManagerState.ENABLE_BLUETOOTH);
             }
         }
         else {
@@ -117,23 +123,7 @@ public class BluetoohManager extends BroadcastReceiver {
                 sendCurrentStateMessage(BluetoothManagerState.CANCEL_DISCOVERY);
 
             }
-
-          //  addButton.setText("Scan");
         }
-    }
-
-    private void sendCurrentStateMessage(BluetoothManagerState state) {
-
-        sendCurrentStateMessage(state, null);
-    }
-
-    private void sendCurrentStateMessage(BluetoothManagerState state, Object obj) {
-
-        Message msg = new Message();
-        msg.what = state.getValue();
-        msg.obj = obj;
-
-        curStateHandler.sendMessage(msg);
     }
 
     @Override
@@ -162,7 +152,20 @@ public class BluetoohManager extends BroadcastReceiver {
                 deviceNames.put(device.getName(), device.getAddress());
                 devices.put(device.getName(), device);
 
-                bluetoothAdapter.cancelDiscovery();
+                cancelDiscovery();
+
+
+                try {
+                    byte[] pin = ByteBuffer.allocate(4).putInt(1234).array();
+                    Method m = device.getClass().getMethod("setPin", byte[].class);
+                    m.invoke(device, pin);
+
+                    device.getClass().getMethod("setPairingConfirmation", boolean.class).invoke(device, true);
+                    device.getClass().getMethod("cancelPairingUserInput", boolean.class).invoke(device);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 sendCurrentStateMessage(BluetoothManagerState.DEVICE_FOUND, new DeviceDTO(device.getName(), device.getAddress()));
             }
@@ -218,36 +221,9 @@ public class BluetoohManager extends BroadcastReceiver {
     }
 
     public void startDiscovery() {
+        isScanning = true;
+
         bluetoothAdapter.startDiscovery();
-    }
-
-    public DeviceDTO startReading() {
-        for (Map.Entry<String, BluetoothDevice> entry : this.devices.entrySet()) {
-            String key = entry.getKey();
-            if( key.contains(DEVICE_NAME)) {
-                return startReadingFromDevice(entry.getValue());
-            }
-        }
-
-        return null;
-    }
-
-    private DeviceDTO startReadingFromDevice(BluetoothDevice device) {
-        DeviceDTO dto = new DeviceDTO();
-        dto.setName(device.getName());
-        dto.setMac(device.getAddress());
-
-        Message msg = new Message();
-        msg.what = SCAN_MESSAGE;
-        msg.obj = dto;
-        scanHandler.sendMessage(msg);
-
-        BluetoothConnectionThread b = new BluetoothConnectionThread(device, bluetoothAdapter, readHandler);
-        connThread = b;
-        b.start();
-        isReading = true;
-
-        return dto;
     }
 
     public void cancelDiscovery() {
@@ -258,6 +234,12 @@ public class BluetoohManager extends BroadcastReceiver {
         }
     }
 
+    public DeviceDTO startReading() {
+
+        BluetoothDevice device = getMainBluetoothDevice();
+        return startReadingFromPolarDevice(device);
+    }
+
     public void cancelReading() {
         isReading = false;
 
@@ -265,6 +247,68 @@ public class BluetoohManager extends BroadcastReceiver {
             connThread.cancel();
         }
     }
+
+
+    private DeviceDTO getMainDevice() {
+
+        BluetoothDevice device = getMainBluetoothDevice();
+        return convertBluetoothToDTO(device);
+    }
+
+    private DeviceDTO convertBluetoothToDTO(BluetoothDevice device) {
+        DeviceDTO dto = new DeviceDTO();
+        dto.setName(device.getName());
+        dto.setMac(device.getAddress());
+
+        return dto;
+    }
+
+    private BluetoothDevice getMainBluetoothDevice() {
+
+        for (Map.Entry<String, BluetoothDevice> entry : this.devices.entrySet()) {
+            String key = entry.getKey();
+            if( key.contains(DEVICE_NAME)) {
+
+                BluetoothDevice device = entry.getValue();
+                return device;
+            }
+        }
+
+        return null;
+    }
+
+    @Deprecated
+    private DeviceDTO startReadingFromPolarDevice(BluetoothDevice device) {
+
+        DeviceDTO dto = convertBluetoothToDTO(device);
+
+        Message msg = new Message();
+        msg.what = SCAN_MESSAGE;
+        msg.obj = dto;
+        scanHandler.sendMessage(msg);
+
+        BluetoothConnectionPolarThread b = new BluetoothConnectionPolarThread(device, bluetoothAdapter, readHandler);
+        connThread = b;
+        b.start();
+        isReading = true;
+
+        return dto;
+    }
+
+    private void sendCurrentStateMessage(BluetoothManagerState state) {
+
+        sendCurrentStateMessage(state, null);
+    }
+
+    private void sendCurrentStateMessage(BluetoothManagerState state, Object obj) {
+
+        Message msg = new Message();
+        msg.what = state.getValue();
+        msg.obj = obj;
+
+        curStateHandler.sendMessage(msg);
+    }
+
 
     public boolean isScanning() {
         return isScanning;

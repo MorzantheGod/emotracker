@@ -17,6 +17,7 @@
     <string name="fullname_not_null">Fullname cannot be empty</string>
     <string name="username_not_null">Username cannot be empty</string>
 
+    <string name="bt_add_device">Add Emotracker device</string>
     <string name="bt_enable">You need enable Bluetooth for using this device</string>
     <string name="bt_not_support">Device does not support bluetooth :(</string>
     <string name="bt_scan">Scan</string>
@@ -24,6 +25,7 @@
     <string name="bt_searching">Searching...</string>
     <string name="bt_not_connected">Not connected</string>
     <string name="bt_connected_to">Connected to: </string>
+    <string name="bt_mac">MAC: </string>
     <string name="bt_unknown_error">Some shitty error happened</string>
 
     <string name="sending_data">Sending data to server...</string>
