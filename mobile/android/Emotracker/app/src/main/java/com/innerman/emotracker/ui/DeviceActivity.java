@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.innerman.emotracker.R;
@@ -18,19 +20,35 @@ import com.innerman.emotracker.bluetooth.BluetoothManagerState;
 import com.innerman.emotracker.config.AppSettings;
 import com.innerman.emotracker.model.device.DartaSensorDTO;
 import com.innerman.emotracker.model.network.DeviceDTO;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.LineGraphView;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeviceActivity extends BaseActivity implements ScanActivity {
+
+    private static final String DATE_FORMAT = "HH:mm:ss";
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
 
     private Button addButton;
     private Button recordButton;
     private TextView statusView;
     private TextView addDeviceView;
-    private TextView dateView;
     private TextView pulseView;
+    private TextView watingView;
 
     private BluetoohManager bluetoohManager = new BluetoohManager(this);
-
     private volatile DeviceDTO mainDevice;
+
+    //data and graph
+    private volatile List<DartaSensorDTO> sensorDataList = new ArrayList<DartaSensorDTO>();
+    private volatile boolean graphInited = false;
+    private volatile GraphViewSeries graphSeries;
+    private volatile GraphView.GraphViewData[] graphData;
+    private long startTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +76,8 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
         statusView = (TextView) findViewById(R.id.statusView);
         addDeviceView = (TextView) findViewById(R.id.addDeviceView);
-        dateView = (TextView) findViewById(R.id.dateView);
         pulseView = (TextView) findViewById(R.id.pulseView);
+        watingView = (TextView) findViewById(R.id.watingView);
 
         checkFormComponents();
     }
@@ -83,25 +101,14 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         }
     }
 
-    private void checkForBluetoothExistence() {
-        boolean exist = bluetoohManager.checkForBluetoothExistence();
-        if( !exist ) {
-            showMessage(getString(R.string.bt_not_support));
-    //        setFormEnabled(false);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            //start activity A here
+            return false;
         }
+        return super.onKeyDown(keyCode, event);
     }
-
-    private boolean checkForBluetoohEnabled(int status) {
-        boolean enabled = bluetoohManager.checkForBluetoohEnabled();
-        if( !enabled ) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, status);
-        }
-
-        return enabled;
-    }
-
-    private volatile int globalCounter = -1;
 
     @Override
     public void handleReadResultMessage(Message msg) {
@@ -123,17 +130,44 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         }
 
         synchronized (this) {
+
+            if( sensorDataList.size() == 0 ) {
+                startTime = System.currentTimeMillis();
+            }
+            long endTime = System.currentTimeMillis();
+            long timeDiff = endTime-startTime;
+
             DartaSensorDTO dto = (DartaSensorDTO) msg.obj;
-            if( globalCounter < dto.getCounter() || dto.getCounter() == 0 ) {
-                pulseView.setText("Pulse: " + dto.getCounter() );
-                globalCounter = dto.getCounter();
+
+            double p = (double)dto.getPulseMs();
+            p /= 1000.0;
+
+            String status = getString(R.string.graph_title) + " " + p + "\t";
+            status += "\t" + getString(R.string.graph_counter) + " " + dto.getCounter();
+            status += "\t" + getString(R.string.graph_measure_time) + " " + (int)Math.ceil(((double)timeDiff)/1000.0) + " s";
+            status += "\n" + getString(R.string.graph_time) + " " + DATE_FORMATTER.format(dto.getDeviceDate());
+            status += "\t" + getString(R.string.graph_system_time) + " " + DATE_FORMATTER.format(dto.getSystemDate());
+            pulseView.setText(status);
+
+            sensorDataList.add(dto);
+            if( sensorDataList.size() >= 0 ) {
+
+                watingView.setVisibility(View.GONE);
+
+                if( !graphInited ) {
+                    initGraph(sensorDataList);
+                }
+                else {
+                    appendToGraph(dto);
+                }
+
             }
         }
     }
 
+
     @Override
     public void handleScanResultMessage(Message msg) {
-
     }
 
     @Override
@@ -189,6 +223,67 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
             addDeviceView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void initGraph(List<DartaSensorDTO> sensorData) {
+
+        graphData = getGraphData(sensorData);
+        graphSeries = new GraphViewSeries(graphData);
+
+        GraphView graphView = new LineGraphView(this, getString(R.string.graph_title));
+        graphView.addSeries(graphSeries);
+
+        graphView.setViewPort(2, 40);
+        graphView.setManualYAxisBounds(1.4, 0.4);
+        graphView.setScrollable(true);
+
+        graphView.setScalable(true);
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.linLayout);
+        layout.addView(graphView);
+
+        graphInited = true;
+    }
+
+    private void appendToGraph(DartaSensorDTO sensorData) {
+
+        graphData = getGraphData(sensorDataList);
+
+        double p = (double)sensorData.getPulseMs();
+        p /= 1000.0;
+        GraphView.GraphViewData data = new GraphView.GraphViewData(graphData.length, p );
+
+        graphSeries.appendData(data, true);
+    }
+
+    private GraphView.GraphViewData[] getGraphData(List<DartaSensorDTO> sensorDataList) {
+        GraphView.GraphViewData[] localGraphData = new GraphView.GraphViewData[sensorDataList.size()];
+        for (int i = 0; i < localGraphData.length; i++) {
+
+            double p = (double)sensorDataList.get(i).getPulseMs();
+            p /= 1000.0;
+            localGraphData[i] = new GraphView.GraphViewData(i, p);
+        }
+
+        return localGraphData;
+    }
+
+    private void checkForBluetoothExistence() {
+        boolean exist = bluetoohManager.checkForBluetoothExistence();
+        if( !exist ) {
+            showMessage(getString(R.string.bt_not_support));
+            //        setFormEnabled(false);
+        }
+    }
+
+    private boolean checkForBluetoohEnabled(int status) {
+        boolean enabled = bluetoohManager.checkForBluetoohEnabled();
+        if( !enabled ) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, status);
+        }
+
+        return enabled;
     }
 
     private void setAddDeviceViewStatus() {
@@ -247,10 +342,21 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
             if( !bluetoohManager.isReading() ) {
                 recordButton.setText(getString(R.string.bt_stop));
 
+                sensorDataList = new ArrayList<DartaSensorDTO>();
+                graphData = new GraphView.GraphViewData[0];
+
+                if( graphSeries != null ) {
+                    graphSeries.resetData(graphData);
+                }
+
+                pulseView.setText(getString(R.string.graph_title) + " ");
+                watingView.setVisibility(View.VISIBLE);
+
                 bluetoohManager.startReading();
             }
             else {
                 recordButton.setText(getString(R.string.bt_record));
+                watingView.setVisibility(View.GONE);
 
                 bluetoohManager.cancelReading();
             }

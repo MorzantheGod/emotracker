@@ -23,12 +23,17 @@
     <string name="bt_scan">Scan</string>
     <string name="bt_stop">Stop</string>
     <string name="bt_record">Record!</string>
-    <string name="bt_searching">Searching...</string>
+    <string name="bt_searching">Searching…</string>
     <string name="bt_not_connected">Not connected</string>
     <string name="bt_connected_to">Connected to: </string>
     <string name="bt_mac">MAC: </string>
     <string name="bt_unknown_error">Some shitty error happened</string>
 
-    <string name="sending_data">Sending data to server...</string>
+    <string name="sending_data">Sending data to server…</string>
 
+    <string name="graph_title">Pulse:</string>
+    <string name="graph_counter">Counter:</string>
+    <string name="graph_time">Device time:</string>
+    <string name="graph_system_time">System time:</string>
+    <string name="graph_measure_time">Measure time:</string>
 </resources>

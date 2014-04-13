@@ -69,47 +69,44 @@ public class BluetoothManagingThread extends Thread {
         }
 
         long time1 = System.currentTimeMillis();
-        long time2 = 0;
-        long datacount = 0;
+        long time2;
 
-        if( !keepThread.isAlive() ) {
-            keepThread.start();
-        }
 
-        StringBuilder stringBuilder = new StringBuilder();
         while (true) {
             try {
-
-                if (reader != null) {
-                    bytes = reader.read(buf);
-                    datacount += bytes;
-                }
-                else {
-                    break;
-                }
-
-                if (bytes < 0)
-                    break;
-
                 time2 = System.currentTimeMillis();
 
-                if (time2 - time1 >= 500) {
+                if (time2 - time1 >= AppSettings.DEVICE_MEASURE_INTERVAL) {
 
+                    if (reader != null) {
+                        bytes = reader.read(buf);
+                    }
+                    else {
+                        break;
+                    }
+
+                    if (bytes < 0)
+                        break;
+
+                    StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(buf, 0, bytes);
-
                     String res = stringBuilder.toString();
+
                     List<DartaSensorDTO> dtos = DartaTextParser.fromString(res);
 
                     if( dtos != null ) {
                         if( dtos.size() > 0 ) {
                             keepThread.addData(dtos);
-                            stringBuilder = new StringBuilder();
+
+                            sendReadMessage(dtos.get(0));
+//                            if( !keepThread.isAlive() && keepThread.getDataSize() >= AppSettings.DEVICE_DISPLAY_MIN_START) {
+//                                keepThread.start();
+//                            }
                         }
                     }
-                  //  sendReadMessage(dtos.get(0));
+
 
                     time1 = time2;
-                    datacount = 0;
                 }
             }
             catch (IOException e) {

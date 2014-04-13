@@ -11,7 +11,10 @@ import java.util.List;
 
 /**
  * Created by petrpopov on 12.04.14.
+ * This is bullshit
  */
+
+@Deprecated
 public class BluetoothKeepThread extends Thread {
 
     private volatile boolean cancelled = false;
@@ -36,13 +39,18 @@ public class BluetoothKeepThread extends Thread {
         }
     }
 
+    public int getDataSize() {
+        synchronized (data) {
+            return data.size();
+        }
+    }
+
     @Override
     public void run() {
 
-        long period = 1000;
+        long period = AppSettings.DEVICE_DISPLAY_INTERVAL;
 
-        long prevTime = 0;
-        long nextTime = 0;
+
 
         int prev = -1;
         int next = -1;
@@ -50,13 +58,30 @@ public class BluetoothKeepThread extends Thread {
         DartaSensorDTO prevDTO = null;
         DartaSensorDTO nextDTO = null;
 
+//        try {
+//            Thread.sleep(AppSettings.DEVICE_DISPLAY_SLEEP_TIME);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        long prevTime = System.currentTimeMillis();
+        long nextTime = 0;
+
         synchronized (data) {
 
             while(true) {
 
-                while (size <= 0 || size <= prev+3 || size <= next+1) {
+                nextTime = System.currentTimeMillis();
+                long timeDiff = nextTime - prevTime;
+                if( timeDiff < period ) {
+                    continue;
+                }
+
+                //wait for data
+                while (size <= 0 || size <= prev+1) {
 
                     if( cancelled ) {
+                        sendOthers(prev);
                         break;
                     }
 
@@ -67,8 +92,10 @@ public class BluetoothKeepThread extends Thread {
                         e.printStackTrace();
                     }
                 }
+                //end of waiting
 
                 if( cancelled ) {
+                    sendOthers(prev);
                     break;
                 }
 
@@ -80,47 +107,53 @@ public class BluetoothKeepThread extends Thread {
                     continue;
                 }
 
+                next = prev + 1;
 
-                nextTime = System.currentTimeMillis();
-                long timeDiff = nextTime - prevTime;
-                if( timeDiff >= period ) {
-                    next = prev + 1;
+                if( data.size() <= next ) {
+                    continue;
+                }
+                nextDTO = data.get(next);
 
-                    if( data.size() <= next ) {
-                        continue;
-                    }
-                    nextDTO = data.get(next);
-
-                    if( nextDTO == null || prevDTO == null ) {
-                        continue;
-                    }
-
-                    if( nextDTO.getDeviceDate() == null || prevDTO.getDeviceDate() == null ) {
-                        continue;
-                    }
-
-                    long dtoDiff = nextDTO.getDeviceDate().getTime() - prevDTO.getDeviceDate().getTime();
-                    if( timeDiff >= dtoDiff ) {
-                        sendMessage(nextDTO);
-
-                        prevTime = nextTime;
-                        prevDTO = nextDTO;
-                        prev = next;
-                    }
+                if( nextDTO == null || prevDTO == null ) {
+                    continue;
                 }
 
+                if( nextDTO.getDeviceDate() == null || prevDTO.getDeviceDate() == null ) {
+                    continue;
+                }
+
+                sendMessage(nextDTO);
+
+                prevTime = nextTime;
+                prevDTO = nextDTO;
+                prev = next;
             }
         }
     }
 
-    public void sendMessage(DartaSensorDTO dto) {
+    public synchronized void cancel() {
+        cancelled = true;
+    }
+
+    private void sendMessage(DartaSensorDTO dto) {
         Message msg = new Message();
         msg.what = AppSettings.READ_MESSAGE;
         msg.obj = dto;
         readHandler.sendMessage(msg);
     }
 
-    public synchronized void cancel() {
-        cancelled = true;
+    private void sendOthers(int prev) {
+
+        if( data.size() <= 0 || data.size() <= prev || prev < 0 ) {
+            return;
+        }
+
+        try {
+            for(int i = prev+1; i <= data.size(); i++) {
+                DartaSensorDTO dto = data.get(i);
+                sendMessage(dto);
+            }
+        }
+        catch (Exception e) {}
     }
 }

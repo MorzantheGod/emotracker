@@ -22,6 +22,11 @@ public class AppSettings {
     public static String APP_SERVER_PORT;
     public static String APP_SERVER_API;
 
+    public static Integer DEVICE_MEASURE_INTERVAL;
+    public static Integer DEVICE_DISPLAY_SLEEP_TIME;
+    public static Integer DEVICE_DISPLAY_INTERVAL;
+    public static Integer DEVICE_DISPLAY_MIN_START;
+
     public static void loadConfig(Resources res) {
         try {
             InputStream rawResource = res.openRawResource(R.raw.config);
@@ -32,7 +37,12 @@ public class AppSettings {
             AppSettings.APP_SERVER_PORT = properties.get("app_server_port").toString();
             AppSettings.APP_SERVER_API = properties.get("app_server_api").toString();
 
-            System.out.println("The properties are now loaded");
+            DEVICE_MEASURE_INTERVAL = Integer.parseInt( properties.getProperty("device_measure_interval") );
+            DEVICE_DISPLAY_SLEEP_TIME = Integer.parseInt( properties.getProperty("device_display_sleep_time") );
+            DEVICE_DISPLAY_INTERVAL = Integer.parseInt( properties.getProperty("device_display_interval") );
+            DEVICE_DISPLAY_MIN_START = Integer.parseInt( properties.getProperty("device_display_min_start") );
+
+                    System.out.println("The properties are now loaded");
             System.out.println("properties: " + properties);
         } catch (Resources.NotFoundException e) {
             System.err.println("Did not find raw resource: " + e);
