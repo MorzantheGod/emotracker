@@ -1,5 +1,7 @@
 package com.innerman.emotracker.dto;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -14,18 +16,22 @@ public class RegistrationDTO {
 
     @NotBlank
     @NotNull
+    @Length(min = 5, max = 250)
     private String fullName;
 
     @NotBlank
     @NotNull
+    @Length(min = 5, max = 250)
     private String userName;
 
     @NotBlank
     @NotNull
+    @Length(min = 6, max = 250)
     private String password;
 
     @NotBlank
     @NotNull
+    @Email
     private String email;
 
     @NotBlank

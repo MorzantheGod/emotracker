@@ -1,4 +1,4 @@
-package com.innerman.emotracker.web.service;
+package com.innerman.emotracker.web.controller;
 
 
 import com.innerman.emotracker.dto.LoginDTO;
@@ -37,18 +37,18 @@ public class UsersController {
     @Autowired
     private WebLoginManager loginManager;
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    @ResponseBody
-    public Object testAPI() {
-
-        try {
-            userService.findById("-1");
-            return WebMessage.createOK("OK");
-        }
-        catch (Exception e) {
-            return WebMessage.createError(e.getMessage());
-        }
-    }
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    @ResponseBody
+//    public Object testAPI() {
+//
+//        try {
+//            userService.findById("-1");
+//            return WebMessage.createOK("OK");
+//        }
+//        catch (Exception e) {
+//            return WebMessage.createError(e.getMessage());
+//        }
+//    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody

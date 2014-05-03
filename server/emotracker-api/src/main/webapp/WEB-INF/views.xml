@@ -5,6 +5,11 @@
 <tiles-definitions>
 
     <definition name="index" template="/WEB-INF/pages/index.jsp">
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+    </definition>
+
+    <definition name="login" template="/WEB-INF/pages/login.jsp">
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
     </definition>
 
 

@@ -1,4 +1,4 @@
-package com.innerman.emotracker.web.service;
+package com.innerman.emotracker.web.controller;
 
 import com.innerman.emotracker.dto.UserDataDTO;
 import com.innerman.emotracker.service.DataService;

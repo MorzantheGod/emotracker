@@ -1,4 +1,4 @@
-package com.innerman.emotracker.web.service;
+package com.innerman.emotracker.web.controller;
 
 import com.innerman.emotracker.model.TokenEntity;
 import com.innerman.emotracker.service.TokenService;
@@ -19,7 +19,6 @@ public class TokenController {
 
     @Autowired
     private TokenService tokenService;
-
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
