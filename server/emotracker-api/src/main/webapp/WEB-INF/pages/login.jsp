@@ -13,6 +13,8 @@
 </head>
 <body>
 <div class="container">
+
+
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info" >
             <div class="panel-heading">
@@ -20,6 +22,9 @@
                 <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
             </div>
 
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger col-sm-12">${error}</div>
+            </c:if>
 
             <div style="padding-top:30px" class="panel-body" >
 
@@ -60,7 +65,7 @@
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <div class="col-md-12 control">
                             <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
                                 Don't have an account?

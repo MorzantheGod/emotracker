@@ -10,15 +10,14 @@
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <import resource="classpath*:spring/emoracker-core.xml"/>
-    <import resource="security-api.xml" />
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
+
     <context:annotation-config/>
+    <context:component-scan base-package="com.innerman.emotracker.web"/>
+
     <mvc:annotation-driven/>
-
     <mvc:annotation-driven validator="globalValidator" />
-
     <mvc:resources mapping="/resources/**"
                    location="/resources/" />
 

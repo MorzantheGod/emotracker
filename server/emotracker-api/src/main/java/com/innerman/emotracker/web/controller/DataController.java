@@ -1,8 +1,8 @@
 package com.innerman.emotracker.web.controller;
 
-import com.innerman.emotracker.dto.UserDataDTO;
-import com.innerman.emotracker.service.DataService;
-import com.innerman.emotracker.utils.EmoException;
+import com.innerman.emotracker.core.dto.UserDataDTO;
+import com.innerman.emotracker.core.service.DataService;
+import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.web.data.WebMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
  * Created by petrpopov on 11.03.14.
  */
 
-@Controller
+@Controller("dataWebController")
 @RequestMapping("/api/data")
 public class DataController {
 

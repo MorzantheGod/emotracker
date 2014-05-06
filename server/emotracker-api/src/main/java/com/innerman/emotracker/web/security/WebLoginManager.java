@@ -1,6 +1,6 @@
 package com.innerman.emotracker.web.security;
 
-import com.innerman.emotracker.security.LoginManager;
+import com.innerman.emotracker.core.security.LoginManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

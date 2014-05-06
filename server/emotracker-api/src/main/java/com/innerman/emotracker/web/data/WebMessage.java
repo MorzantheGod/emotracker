@@ -1,8 +1,8 @@
 package com.innerman.emotracker.web.data;
 
-import com.innerman.emotracker.utils.EmoException;
-import com.innerman.emotracker.utils.ErrorType;
-import com.innerman.emotracker.utils.MessageProvider;
+import com.innerman.emotracker.core.utils.EmoException;
+import com.innerman.emotracker.core.utils.ErrorType;
+import com.innerman.emotracker.core.utils.MessageProvider;
 
 import java.io.Serializable;
 

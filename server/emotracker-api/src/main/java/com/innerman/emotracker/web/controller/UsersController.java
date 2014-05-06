@@ -1,12 +1,12 @@
 package com.innerman.emotracker.web.controller;
 
 
-import com.innerman.emotracker.dto.LoginDTO;
-import com.innerman.emotracker.dto.RegistrationDTO;
-import com.innerman.emotracker.model.UserEntity;
-import com.innerman.emotracker.service.UserService;
-import com.innerman.emotracker.utils.EmoException;
-import com.innerman.emotracker.utils.ErrorType;
+import com.innerman.emotracker.core.dto.LoginDTO;
+import com.innerman.emotracker.core.dto.RegistrationDTO;
+import com.innerman.emotracker.core.model.UserEntity;
+import com.innerman.emotracker.core.service.UserService;
+import com.innerman.emotracker.core.utils.EmoException;
+import com.innerman.emotracker.core.utils.ErrorType;
 import com.innerman.emotracker.web.data.WebMessage;
 import com.innerman.emotracker.web.security.WebLoginManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,29 +26,15 @@ import javax.validation.Valid;
  * Time: 22:37
  */
 
-@Controller
+@Controller("usersWebController")
 @RequestMapping("/api/users")
 public class UsersController {
 
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private WebLoginManager loginManager;
-
-//    @RequestMapping(value = "/test", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Object testAPI() {
-//
-//        try {
-//            userService.findById("-1");
-//            return WebMessage.createOK("OK");
-//        }
-//        catch (Exception e) {
-//            return WebMessage.createError(e.getMessage());
-//        }
-//    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody

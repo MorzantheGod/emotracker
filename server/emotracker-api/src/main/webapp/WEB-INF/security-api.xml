@@ -11,7 +11,7 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
         <form-login
                 login-page="/login"
                 default-target-url="/"
-                authentication-failure-url="/login?error=true"
+                authentication-failure-url="/login?error"
                 username-parameter="username"
                 password-parameter="password" />
         <logout logout-success-url="/login?logout" />
@@ -40,5 +40,20 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
         <!--<custom-filter ref="cheatRememberFilter" position="REMEMBER_ME_FILTER"/>-->
 
     </http>
+
+
+    <authentication-manager alias="authenticationManager" erase-credentials="false">
+        <authentication-provider>
+            <user-service id="inMemoryUserService">
+                <user name="#{properties.admin_username}" password="#{properties.admin_password}" authorities="ROLE_USER,ROLE_ADMIN"/>
+            </user-service>
+        </authentication-provider>
+        <!--<authentication-provider ref="rememberMeProvider"/>-->
+        <authentication-provider ref="authProvider"/>
+    </authentication-manager>
+
+    <global-method-security secured-annotations="enabled" jsr250-annotations="enabled" pre-post-annotations="enabled"/>
+
+    <beans:bean id="authProvider" class="com.innerman.emotracker.core.security.AuthProvider"/>
 
 </beans:beans>
