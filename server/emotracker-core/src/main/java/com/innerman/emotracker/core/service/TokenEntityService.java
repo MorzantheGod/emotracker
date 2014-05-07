@@ -13,11 +13,11 @@ import java.util.UUID;
  */
 
 @Component
-public class TokenService extends GenericService<TokenEntity> {
+public class TokenEntityService extends GenericEntityService<TokenEntity> {
 
-    public TokenService() {
+    public TokenEntityService() {
         super(TokenEntity.class);
-        logger = Logger.getLogger(TokenService.class);
+        logger = Logger.getLogger(TokenEntityService.class);
     }
 
     public TokenEntity generateToken() {

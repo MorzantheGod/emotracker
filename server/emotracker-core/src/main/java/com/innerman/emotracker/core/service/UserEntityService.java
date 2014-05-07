@@ -24,21 +24,21 @@ import java.util.UUID;
  */
 
 @Component
-public class UserService extends GenericService<UserEntity> {
+public class UserEntityService extends GenericEntityService<UserEntity> {
 
     @Autowired
     private EmoPasswordEncoder encoder;
 
     @Autowired
-    private TokenService tokenService;
+    private TokenEntityService tokenService;
 
     private static final String USERNAME_FIELD = "userName";
     private static final String EMAIL_FIELD = "email";
     private static final String TOKEN_KEY_FIELD = "tokens.key";
 
-    public UserService() {
+    public UserEntityService() {
         super(UserEntity.class);
-        logger = Logger.getLogger(UserService.class);
+        logger = Logger.getLogger(UserEntityService.class);
     }
 
 

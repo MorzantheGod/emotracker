@@ -6,7 +6,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <t:insertAttribute name="header" />
 
     <script type="text/javascript" src="/resources/js/emotracker-auth.js"></script>
@@ -16,8 +15,8 @@
 </head>
 <body>
 
-<t:insertAttribute name="navigation" />
 
+<t:insertAttribute name="navigation" />
 
 <div class="container-fluid">
     <div class="row">
@@ -34,27 +33,11 @@
             <div class="row">
 
                 <ol class="breadcrumb">
-                    <li class="active"><a href="<spring:url value="/"/>">Измерения</a></li>
+                    <li><a href="<spring:url value="/"/>">Измерения</a></li>
+                    <li class="active">01.02.2014 15:03:03 Фильм</li>
                 </ol>
 
-                <div class="table-responsive">
-                    <table class="table table-condensed table-hover table-bordered table-striped">
 
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Дата</th>
-                                <th>Название</th>
-                                <th>Описание</th>
-                                <th>Продолжительность</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="dataEventTable">
-
-                        </tbody>
-                    </table>
-                </div>
 
             </div>
 
@@ -64,4 +47,3 @@
 
 </body>
 </html>
-

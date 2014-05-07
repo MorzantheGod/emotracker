@@ -1,7 +1,9 @@
 package com.innerman.emotracker.web.controller;
 
 import com.innerman.emotracker.core.dto.UserDataDTO;
-import com.innerman.emotracker.core.service.DataService;
+import com.innerman.emotracker.core.model.DataEventEntity;
+import com.innerman.emotracker.core.service.DataEntityService;
+import com.innerman.emotracker.core.service.DataEventEntityService;
 import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.web.data.WebMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by petrpopov on 11.03.14.
@@ -23,7 +26,10 @@ import javax.validation.Valid;
 public class DataController {
 
     @Autowired
-    private DataService dataService;
+    private DataEntityService dataEntityService;
+
+    @Autowired
+    private DataEventEntityService dataEventEntityService;
 
     @RequestMapping(value = "/saveData", method = RequestMethod.POST)
     @ResponseBody
@@ -34,12 +40,20 @@ public class DataController {
         }
 
         try {
-            dataService.saveDataForUser(data);
+            dataEntityService.saveDataForUser(data);
         }
         catch (EmoException e) {
             return WebMessage.createError(e);
         }
 
         return WebMessage.createOK("OK");
+    }
+
+    @RequestMapping(value = "/getDataEvents.data", method = RequestMethod.GET)
+    @ResponseBody
+    public Object getDataEvents() {
+
+        List<DataEventEntity> lastEvents = dataEventEntityService.getLastEvents();
+        return lastEvents;
     }
 }

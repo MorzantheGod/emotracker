@@ -6,6 +6,12 @@
 
     <definition name="index" template="/WEB-INF/pages/index.jsp">
         <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+        <put-attribute name="navigation" value="/WEB-INF/pages/tiles/navigation.jsp"/>
+    </definition>
+
+    <definition name="dataevent" template="/WEB-INF/pages/dataevent.jsp">
+        <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+        <put-attribute name="navigation" value="/WEB-INF/pages/tiles/navigation.jsp"/>
     </definition>
 
     <definition name="login" template="/WEB-INF/pages/login.jsp">

@@ -11,11 +11,17 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller("mainWebController")
-public class MainController {
+public class MainPagesController {
 
     @RequestMapping(value = {"/", "/index"})
     public String indexPage() {
         return "index";
+    }
+
+    @RequestMapping(value = "/dataevent")
+    public String dataEventPage() {
+
+        return "dataevent";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

@@ -1,7 +1,7 @@
 package com.innerman.emotracker.core.security;
 
 import com.innerman.emotracker.core.model.UserEntity;
-import com.innerman.emotracker.core.service.UserService;
+import com.innerman.emotracker.core.service.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class EmoUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private UserEntityService userService;
 
     @Autowired
     private UserDetailsAssembler userDetailsAssembler;

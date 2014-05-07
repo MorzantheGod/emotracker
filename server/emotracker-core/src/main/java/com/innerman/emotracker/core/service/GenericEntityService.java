@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 @Component
-public class GenericService<T> {
+public class GenericEntityService<T> {
 
     @Autowired
     @Qualifier("mongoTemplate")
@@ -29,11 +29,11 @@ public class GenericService<T> {
 
     protected Logger logger;
 
-    public GenericService() {
-        logger = Logger.getLogger(GenericService.class);
+    public GenericEntityService() {
+        logger = Logger.getLogger(GenericEntityService.class);
     }
 
-    public GenericService(Class<T> domainClass) {
+    public GenericEntityService(Class<T> domainClass) {
         this.domainClass = domainClass;
         logger = Logger.getLogger(domainClass);
     }

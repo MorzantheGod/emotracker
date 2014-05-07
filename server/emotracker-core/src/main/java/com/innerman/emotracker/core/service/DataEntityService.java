@@ -19,14 +19,14 @@ import java.util.List;
  */
 
 @Component
-public class DataService extends GenericService<DataEntity> {
+public class DataEntityService extends GenericEntityService<DataEntity> {
 
     @Autowired
-    private UserService userService;
+    private UserEntityService userService;
 
-    public DataService() {
+    public DataEntityService() {
         super(DataEntity.class);
-        logger = Logger.getLogger(DataService.class);
+        logger = Logger.getLogger(DataEntityService.class);
     }
 
     public void saveDataForUser(UserDataDTO data) throws EmoException {

@@ -4,7 +4,7 @@ package com.innerman.emotracker.web.controller;
 import com.innerman.emotracker.core.dto.LoginDTO;
 import com.innerman.emotracker.core.dto.RegistrationDTO;
 import com.innerman.emotracker.core.model.UserEntity;
-import com.innerman.emotracker.core.service.UserService;
+import com.innerman.emotracker.core.service.UserEntityService;
 import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.core.utils.ErrorType;
 import com.innerman.emotracker.web.data.WebMessage;
@@ -31,7 +31,7 @@ import javax.validation.Valid;
 public class UsersController {
 
     @Autowired
-    private UserService userService;
+    private UserEntityService userService;
 
     @Autowired
     private WebLoginManager loginManager;

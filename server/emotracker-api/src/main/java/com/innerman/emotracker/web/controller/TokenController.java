@@ -1,7 +1,7 @@
 package com.innerman.emotracker.web.controller;
 
 import com.innerman.emotracker.core.model.TokenEntity;
-import com.innerman.emotracker.core.service.TokenService;
+import com.innerman.emotracker.core.service.TokenEntityService;
 import com.innerman.emotracker.web.data.WebMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TokenController {
 
     @Autowired
-    private TokenService tokenService;
+    private TokenEntityService tokenService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
