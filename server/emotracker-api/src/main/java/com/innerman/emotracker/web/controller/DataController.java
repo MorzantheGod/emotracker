@@ -88,6 +88,7 @@ public class DataController {
         dto.setAccY(3);
         dto.setAccX(4);
         dto.setAccZ(5);
+        list.add(dto);
 
         res.setSensors(list);
 

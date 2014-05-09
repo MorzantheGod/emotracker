@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Bootstrap -->
-<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 
-<link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/resources/css/dashboard.css">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/dashboard.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,13 +18,18 @@
 <![endif]-->
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script type="text/javascript" src="/resources/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery-1.11.0.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script type="text/javascript" src="/resources/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="/resources/js/jquery.validate.min.js"></script>
-<script type="text/javascript" src="/resources/js/messages_ru.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/messages_ru.js"></script>
 
-<script type="text/javascript" src="/resources/js/jquery-ui-1.10.3.custom.min.js"></script>
-<script type="text/javascript" src="/resources/js/jquery-ui.datepicker.ru.js"></script>
-<script type="text/javascript" src="/resources/js/jquery-ui-timepicker-addon-1.4.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery-ui.datepicker.ru.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery-ui-timepicker-addon-1.4.js"></script>
+
+<label id="realPath" hidden="true" style="display: none;">
+    <%= request.getScheme()+"://"
+            + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>
+</label>

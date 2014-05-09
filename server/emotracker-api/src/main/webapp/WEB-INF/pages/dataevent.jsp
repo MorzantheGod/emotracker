@@ -8,9 +8,12 @@
 <head>
     <t:insertAttribute name="header" />
 
-    <script type="text/javascript" src="/resources/js/DataEventLoader.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/globalize.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/dx.chartjs.js"></script>
 
-    <title>Emotracker</title>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/api/DataEventLoader.js"></script>
+
+    <title>Emotracker Data</title>
 </head>
 <body>
 
@@ -45,8 +48,7 @@
                     <li id="dataEventTitle" class="active"></li>
                 </ol>
 
-
-
+                <div id="chartContainer" style="max-width:800px;height: 400px;"></div>
             </div>
 
         </div>

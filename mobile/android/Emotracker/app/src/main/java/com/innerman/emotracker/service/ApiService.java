@@ -17,6 +17,7 @@ public abstract class ApiService<T> {
     private String BASE_API_URL;
     private Class<T> domainClass;
 
+    private static final String INTERNAL_ERROR = "Internal error";
     private static final String UNAVAILABLE = "Server unavailable";
 
     public ApiService(Class<T> clazz) {
@@ -55,6 +56,9 @@ public abstract class ApiService<T> {
         catch (RestClientException e) {
             return getErrorResult();
         }
+        catch(Exception e) {
+            return getErrorResult(INTERNAL_ERROR);
+        }
     }
 
     protected WebMessage<T> getConvertedResult(WebMessage message) {
@@ -79,6 +83,14 @@ public abstract class ApiService<T> {
         WebMessage<T> res = new WebMessage<T>();
         res.setState(MessageState.ERROR);
         res.setMessage(UNAVAILABLE);
+
+        return res;
+    }
+
+    protected WebMessage<T> getErrorResult(String error) {
+        WebMessage<T> res = new WebMessage<T>();
+        res.setState(MessageState.ERROR);
+        res.setMessage(error);
 
         return res;
     }
