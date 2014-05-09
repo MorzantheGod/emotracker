@@ -56,7 +56,7 @@ public class RegistrationActivity extends BaseActivity {
         storage = new UserDataStorage(getApplicationContext(), getString(R.string.config_name));
         boolean userValid = storage.isUserValid();
         if(userValid == true ) {
-            Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DeviceActivity.class);
             startActivity(intent);
             return;
         }
@@ -253,7 +253,7 @@ public class RegistrationActivity extends BaseActivity {
                 storage.saveUser((UserDTO) webMessage.getResult());
 
                 //show results
-                Intent intent = new Intent(getApplicationContext(), ResultsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), DeviceActivity.class);
                 startActivity(intent);
             }
         }

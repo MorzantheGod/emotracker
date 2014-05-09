@@ -26,7 +26,7 @@ public class RegistrationDTO {
 
     @NotBlank
     @NotNull
-    @Length(min = 6, max = 250)
+    @Length(min = 3, max = 250)
     private String password;
 
     @NotBlank

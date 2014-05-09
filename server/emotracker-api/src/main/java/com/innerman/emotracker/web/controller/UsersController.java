@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,10 +39,14 @@ public class UsersController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public Object createNewUser(@Valid @RequestBody RegistrationDTO regDto, BindingResult result) {
+    public Object createNewUser(@RequestBody RegistrationDTO regDto, BindingResult result) {
 
         if( result.hasErrors() ) {
-            return WebMessage.createValidationError();
+            String field = ((FieldError) result.getAllErrors().get(0)).getField();
+            String defaultMessage = ((FieldError) result.getAllErrors().get(0)).getDefaultMessage();
+
+            String mes = field + ": " + defaultMessage;
+            return WebMessage.createError(mes);
         }
 
         try {
