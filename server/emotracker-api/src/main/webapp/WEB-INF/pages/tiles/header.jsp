@@ -24,3 +24,7 @@
 
 <script type="text/javascript" src="/resources/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/resources/js/messages_ru.js"></script>
+
+<script type="text/javascript" src="/resources/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery-ui.datepicker.ru.js"></script>
+<script type="text/javascript" src="/resources/js/jquery-ui-timepicker-addon-1.4.js"></script>

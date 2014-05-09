@@ -1,6 +1,8 @@
 package com.innerman.emotracker.web.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +20,10 @@ public class MainPagesController {
         return "index";
     }
 
-    @RequestMapping(value = "/dataevent")
-    public String dataEventPage() {
+    @RequestMapping(value = "/dataevent/{dataEventId}")
+    public String dataEventPage(@PathVariable String dataEventId, Model model) {
 
+        model.addAttribute("dataEventId", dataEventId);
         return "dataevent";
     }
 

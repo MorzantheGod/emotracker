@@ -8,13 +8,21 @@
 <head>
     <t:insertAttribute name="header" />
 
-    <script type="text/javascript" src="/resources/js/emotracker-auth.js"></script>
-    <script type="text/javascript" src="/resources/js/emotracker.js"></script>
+    <script type="text/javascript" src="/resources/js/DataEventLoader.js"></script>
 
     <title>Emotracker</title>
 </head>
 <body>
 
+<script type="text/javascript">
+    $( document ).ready(function() {
+        new DataEventLoader({
+            dataEventId: "${dataEventId}",
+            dataEventDivId: "dataEventDiv",
+            dataEventTitleId: "dataEventTitle"
+        });
+    });
+</script>
 
 <t:insertAttribute name="navigation" />
 
@@ -30,11 +38,11 @@
 
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div class="row">
+            <div id="dataEventDiv" class="row">
 
                 <ol class="breadcrumb">
                     <li><a href="<spring:url value="/"/>">Измерения</a></li>
-                    <li class="active">01.02.2014 15:03:03 Фильм</li>
+                    <li id="dataEventTitle" class="active"></li>
                 </ol>
 
 

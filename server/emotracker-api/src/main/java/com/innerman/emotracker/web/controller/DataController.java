@@ -1,5 +1,7 @@
 package com.innerman.emotracker.web.controller;
 
+import com.innerman.emotracker.core.dto.DartaSensorDTO;
+import com.innerman.emotracker.core.dto.DataEventDTO;
 import com.innerman.emotracker.core.dto.UserDataDTO;
 import com.innerman.emotracker.core.model.DataEventEntity;
 import com.innerman.emotracker.core.service.DataEntityService;
@@ -9,12 +11,11 @@ import com.innerman.emotracker.web.data.WebMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,7 +54,44 @@ public class DataController {
     @ResponseBody
     public Object getDataEvents() {
 
-        List<DataEventEntity> lastEvents = dataEventEntityService.getLastEvents();
+        List<DataEventDTO> lastEvents = dataEventEntityService.getLastEventsDTOs();
+
+        DataEventDTO dto = new DataEventDTO();
+        dto.setId("af72397sdf");
+        dto.setUserId("dshfkjh2832");
+        dto.setStartDate(new Date());
+        dto.setEndDate(new Date());
+        dto.setName("Фильм Матрица");
+
+        lastEvents.add(dto);
+
         return lastEvents;
+    }
+
+    @RequestMapping(value = "/getDataEvent.data", method = RequestMethod.GET)
+    @ResponseBody
+    public Object getDataEvent(@RequestParam String id) {
+
+        DataEventEntity res = new DataEventEntity();
+        res.setId(id);
+        res.setName("Фильм Матрица");
+        res.setDescription("Просмотр фильма с приложением");
+        res.setStartDate(new Date());
+
+        List<DartaSensorDTO> list = new ArrayList<DartaSensorDTO>();
+
+        DartaSensorDTO dto = new DartaSensorDTO();
+        dto.setHeader("#DAR");
+        dto.setPulseMs(230);
+        dto.setCounter(0);
+        dto.setDeviceDate(new Date());
+        dto.setAccY(3);
+        dto.setAccX(4);
+        dto.setAccZ(5);
+
+        res.setSensors(list);
+
+        return res;
+        //return dataEventEntityService.findById(id);
     }
 }

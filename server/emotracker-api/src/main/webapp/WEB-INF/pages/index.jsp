@@ -10,7 +10,7 @@
     <t:insertAttribute name="header" />
 
     <script type="text/javascript" src="/resources/js/emotracker-auth.js"></script>
-    <script type="text/javascript" src="/resources/js/emotracker.js"></script>
+    <script type="text/javascript" src="/resources/js/Emotracker.js"></script>
 
     <title>Emotracker</title>
 </head>
@@ -18,6 +18,15 @@
 
 <t:insertAttribute name="navigation" />
 
+<script type="text/javascript">
+    $( document ).ready(function() {
+        new Emotracker({
+            dataEventTbodyId: "dataEventTbody",
+            dataEventTableId: "dataEventTable",
+            dataEventAlertId: "dataEventAlert"
+        });
+    });
+</script>
 
 <div class="container-fluid">
     <div class="row">
@@ -37,7 +46,11 @@
                     <li class="active"><a href="<spring:url value="/"/>">Измерения</a></li>
                 </ol>
 
-                <div class="table-responsive">
+                <div style="display: none;" id="dataEventAlert" class="alert alert-info">
+                    У вас пока нет результатов измерений Emotracker Mobile
+                </div>
+
+                <div id="dataEventTable" class="table-responsive">
                     <table class="table table-condensed table-hover table-bordered table-striped">
 
                         <thead>
@@ -46,11 +59,10 @@
                                 <th>Дата</th>
                                 <th>Название</th>
                                 <th>Описание</th>
-                                <th>Продолжительность</th>
                             </tr>
                         </thead>
 
-                        <tbody id="dataEventTable">
+                        <tbody id="dataEventTbody">
 
                         </tbody>
                     </table>
