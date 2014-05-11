@@ -21,7 +21,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -95,7 +94,14 @@ public class DataController {
         }
 
         res = dataEventEntityService.getLastEventsDTOs(user);
+      //  res.add(fill1());
 
+        return res;
+    }
+
+    //TODO: remove
+    @Deprecated
+    private DataEventDTO fill1() {
         DataEventDTO dto = new DataEventDTO();
         dto.setId("536c93c83004979c703761c6");
         dto.setUserId("536c93c83004979c703761c6");
@@ -104,9 +110,7 @@ public class DataController {
         dto.setName("Фильм Матрица");
         dto.setDescription("Просмотр фильма с приложением Emotracker mobile");
 
-        res.add(dto);
-
-        return res;
+        return dto;
     }
 
     @RequestMapping(value = "/getDataEvent.data", method = RequestMethod.GET)
@@ -121,7 +125,14 @@ public class DataController {
         }
 
         res = dataEventEntityService.getDataEventForUser(id, user);
-        res = new DataEventEntity();
+   //     res = fill2(id);
+        return res;
+    }
+
+    //TODO: remove
+    @Deprecated
+    private DataEventEntity fill2(String id) {
+        DataEventEntity res = new DataEventEntity();
 
         res.setId(id);
         res.setName("Фильм Матрица");
@@ -181,14 +192,18 @@ public class DataController {
         list.add(dto4);
 
         res.setSensors(list);
-
         return res;
     }
 
     @RequestMapping(value = "/getDataEventReport.action", method = RequestMethod.GET)
-    public void compileReport(HttpServletResponse response) throws IOException, JRException, URISyntaxException {
+    public void compileReport(@RequestParam String id, HttpServletResponse response) throws JRException, IOException {
 
-        byte[] bytes = reportManager.getReport();
+        UserEntity user = userContextHandler.currentContextUser();
+        if( user == null ) {
+            return;
+        }
+
+        byte[] bytes = reportManager.getDataEventReport(id, user);
 
         response.setContentType( "application/pdf");
         response.setContentLength(bytes.length);
