@@ -30,7 +30,8 @@
             endDateId: "endDateId",
             dataEventContentTbodyId: "dataEventContentTbody",
             chartContainerId: "chartPulseContainer",
-            chartAccContainerId: "chartAccContainer"
+            chartAccContainerId: "chartAccContainer",
+            reportLinkId: "reportLink"
         });
     });
 </script>
@@ -74,7 +75,9 @@
             </div>
 
             <div class="row">
-                <p class="pull-right"><a href="#">Скачать в Excel</a></p>
+                <p class="pull-right">
+                    <a id="reportLink" href="<spring:url value="/api/data/getDataEventReport.action"/>">Скачать в Excel</a>
+                </p>
                 <div id="dataEventContentTable" class="table-responsive">
                     <table class="table table-condensed table-hover table-bordered table-striped">
 

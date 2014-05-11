@@ -20,9 +20,19 @@
         <spring.data.mongodb.version>1.2.1.RELEASE</spring.data.mongodb.version>
 
         <slf4j.version>1.7.5</slf4j.version>
+
+        <jasperReport.version>5.2.0</jasperReport.version>
     </properties>
 
+
     <dependencies>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>${jasperReport.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -187,6 +197,34 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jasperreports-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile-reports</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <sourceDirectory>src/main/resources/reports</sourceDirectory>
+                    <outputDirectory>src/main/resources/reports</outputDirectory>
+                </configuration>
+
+                <dependencies>
+                    <!--note this must be repeated here to pick up correct xml validation -->
+                    <dependency>
+                        <groupId>net.sf.jasperreports</groupId>
+                        <artifactId>jasperreports</artifactId>
+                        <version>${jasperReport.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

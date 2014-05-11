@@ -7,15 +7,21 @@ import com.innerman.emotracker.core.model.DataEventEntity;
 import com.innerman.emotracker.core.model.UserEntity;
 import com.innerman.emotracker.core.service.DataEntityService;
 import com.innerman.emotracker.core.service.DataEventEntityService;
+import com.innerman.emotracker.core.service.ReportManager;
 import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.web.data.WebMessage;
 import com.innerman.emotracker.web.utils.UserContextHandler;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +42,9 @@ public class DataController {
 
     @Autowired
     private DataEventEntityService dataEventEntityService;
+
+    @Autowired
+    private ReportManager reportManager;
 
     @RequestMapping(value = "/saveDataEvent", method = RequestMethod.POST)
     @ResponseBody
@@ -175,4 +184,19 @@ public class DataController {
 
         return res;
     }
+
+    @RequestMapping(value = "/getDataEventReport.action", method = RequestMethod.GET)
+    public void compileReport(HttpServletResponse response) throws IOException, JRException, URISyntaxException {
+
+        byte[] bytes = reportManager.getReport();
+
+        response.setContentType( "application/pdf");
+        response.setContentLength(bytes.length);
+
+        ServletOutputStream ouputStream = response.getOutputStream();
+        ouputStream.write(bytes, 0, bytes.length );
+        ouputStream.flush() ;
+        ouputStream.close();
+    }
+
 }

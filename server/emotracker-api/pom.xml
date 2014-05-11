@@ -23,9 +23,12 @@
         <tiles.version>2.2.2</tiles.version>
 
         <slf4j.version>1.7.5</slf4j.version>
+
     </properties>
 
     <dependencies>
+
+
         <dependency>
             <groupId>com.innermansoftware</groupId>
             <artifactId>emotracker-core</artifactId>
@@ -102,6 +105,8 @@
         <finalName>emotracker-api-${project.version}</finalName>
 
         <plugins>
+
+
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jrebel-maven-plugin</artifactId>

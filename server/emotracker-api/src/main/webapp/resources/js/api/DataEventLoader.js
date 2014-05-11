@@ -14,6 +14,7 @@ var DataEventLoader = function(options) {
     this.options = options;
 
     var GET_DATA_EVENT_URL = "/api/data/getDataEvent.data";
+    var GET_DATA_EVENT_REPORT = "/api/data/getDataEventReport.action";
 
     var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
 
@@ -26,6 +27,7 @@ var DataEventLoader = function(options) {
     var $endDate = $('#' + options.endDateId);
     var $chartPulseContainer = $('#' + options.chartContainerId);
     var $chartAccContainer = $('#' + options.chartAccContainerId);
+    var $reportLink = $('#' + options.reportLinkId);
 
 
     //-----------------------------
@@ -210,6 +212,19 @@ var DataEventLoader = function(options) {
         );
 
         return tr;
+    };
+
+    var enableDownloadReportLink = function() {
+
+        $reportLink.click(function() {
+            $.ajax({
+                type: 'GET',
+                url: getServerUrl(GET_DATA_EVENT_REPORT),
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+        });
     };
 
     //-----------------------------
