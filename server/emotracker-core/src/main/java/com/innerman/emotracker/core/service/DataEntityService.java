@@ -19,6 +19,7 @@ import java.util.List;
  */
 
 @Component
+@Deprecated
 public class DataEntityService extends GenericEntityService<DataEntity> {
 
     @Autowired

@@ -32,6 +32,25 @@ public class DataController {
     @Autowired
     private DataEventEntityService dataEventEntityService;
 
+    @RequestMapping(value = "/saveDataEvent", method = RequestMethod.POST)
+    @ResponseBody
+    public Object saveDataEvent(@Valid @RequestBody DataEventDTO data, BindingResult result) {
+
+        if( result.hasErrors() ) {
+            return WebMessage.createValidationError();
+        }
+
+        try {
+            dataEventEntityService.saveDataForUser(data);
+        }
+        catch (EmoException e) {
+            return WebMessage.createError(e);
+        }
+
+        return WebMessage.createOK("OK");
+    }
+
+    @Deprecated
     @RequestMapping(value = "/saveData", method = RequestMethod.POST)
     @ResponseBody
     public Object saveData(@Valid @RequestBody UserDataDTO data, BindingResult result) {

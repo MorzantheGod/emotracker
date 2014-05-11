@@ -1,17 +1,15 @@
-package com.innerman.emotracker.core.dto;
+package com.innerman.emotracker.model.network;
 
-import com.innerman.emotracker.core.model.DataEventEntity;
+import com.innerman.emotracker.model.device.DartaSensorDTO;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
- * User: petrpopov
- * Date: 08.05.14
- * Time: 23:50
+ * Created by petrpopov on 09.05.14.
  */
-
-public class DataEventDTO {
+public class DataEventDTO implements Serializable {
 
     private String id;
 
@@ -25,24 +23,8 @@ public class DataEventDTO {
 
     private List<DartaSensorDTO> sensors;
 
+    private List<String> tags;
 
-    public static DataEventDTO fromDataEventEntity(DataEventEntity entity) {
-
-        if( entity == null ) {
-            return null;
-        }
-
-        DataEventDTO res = new DataEventDTO();
-
-        res.setId(entity.getId());
-        res.setUserId(entity.getUserId());
-        res.setName(entity.getName());
-        res.setDescription(entity.getDescription());
-        res.setStartDate(entity.getStartDate());
-        res.setEndDate(entity.getEndDate());
-
-        return res;
-    }
 
     public String getId() {
         return id;
@@ -98,5 +80,13 @@ public class DataEventDTO {
 
     public void setSensors(List<DartaSensorDTO> sensors) {
         this.sensors = sensors;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

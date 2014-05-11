@@ -127,4 +127,9 @@ public class UserDataStorage extends SimpleDataStorage {
 
         return dto;
     }
+
+    public String getUserId() {
+        UserDTO user = getUser();
+        return user.getId();
+    }
 }

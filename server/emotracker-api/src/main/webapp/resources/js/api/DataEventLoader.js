@@ -20,6 +20,11 @@ var DataEventLoader = function(options) {
     var $dataEventId = options.dataEventId;
     var $dataEventDiv = $('#' + options.dataEventDivId);
     var $dataEventTitle = $('#' + options.dataEventTitleId );
+    var $dataEventContentTbody = $('#' + options.dataEventContentTbodyId );
+    var $dataEventDescription = $('#' + options.dataEventDescriptionId );
+    var $startDate = $('#' + options.startDateId);
+    var $endDate = $('#' + options.endDateId);
+    var $chartContainer = $('#' + options.chartContainerId)
 
 
     //-----------------------------
@@ -51,15 +56,110 @@ var DataEventLoader = function(options) {
             return;
         }
 
+        fillDescriptionData(data);
+        fillSensorGraph(data);
+        fillSensorTable(data);
+    };
+
+    var fillDescriptionData = function(data) {
         var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(data.startDate) );
         $dataEventTitle.text(displayDate + " " + data.name);
 
-        $("#chartContainer").dxChart({
-//                dataSource: [
-//                    //...
-//                ],
-//                series: {valueField: 'costs', argumentField: 'day'}
+        $dataEventDescription.text(data.description);
+
+        var startDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(data.startDate) );
+        $startDate.text(startDate);
+
+        var endDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(data.endDate) );
+        $endDate.text(endDate);
+    };
+
+    var fillSensorGraph = function(data) {
+
+        if( !data || !data.sensors ) {
+            return;
+        }
+
+        var sensorsArray = $.map(data.sensors, function(val) {
+            return {counter: val.counter, pulseMs: val.pulseMs, accX: val.accX, accY: val.accY, accZ: val.accZ};
         });
+
+        $chartContainer.dxChart({
+            dataSource: sensorsArray,
+
+            commonSeriesSettings: {
+                argumentField: "counter",
+                type: "stackedLine"
+            },
+
+            series: [
+                { valueField: "pulseMs", name: "Пульс", color: '#ffa500' },
+//                { valueField: "accX", name: "X" },
+//                { valueField: "accY", name: "Y" },
+//                { valueField: "accZ", name: "Z" }
+            ],
+
+            argumentAxis:{
+                grid:{
+                    visible: true
+                }
+            },
+            tooltip:{
+                enabled: true
+            },
+            title: "Пульс и ускорение",
+            legend: {
+                verticalAlignment: "bottom",
+                horizontalAlignment: "center"
+            },
+            ommonPaneSettings: {
+                border:{
+                    visible: true,
+                    right: false
+                }
+            },
+
+            commonAxisSettings: {
+                label: {
+                    overlappingBehavior: { mode: 'rotate', rotationAngle: 50 }
+                }
+            }
+        });
+    };
+
+    var fillSensorTable = function(data) {
+        if( !data || !data.sensors ) {
+            return;
+        }
+
+        $.each(data.sensors, function(n, sensor) {
+            createSensorTableRow(sensor).appendTo($dataEventContentTbody);
+        });
+    };
+
+    var createSensorTableRow = function(sensor) {
+        var deviceDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(sensor.deviceDate) );
+        var systemDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(sensor.systemDate) );
+
+        var tr = $('<tr/>').append(
+            $('<td/>').text(sensor.header)
+        ).append(
+            $('<td/>').text(sensor.counter)
+        ).append(
+            $('<td/>').text(systemDate)
+        ).append(
+            $('<td/>').text(deviceDate)
+        ).append(
+            $('<td/>').text(sensor.pulseMs)
+        ).append(
+            $('<td/>').text(sensor.accX)
+        ).append(
+            $('<td/>').text(sensor.accY)
+        ).append(
+            $('<td/>').text(sensor.accZ)
+        );
+
+        return tr;
     };
 
     //-----------------------------

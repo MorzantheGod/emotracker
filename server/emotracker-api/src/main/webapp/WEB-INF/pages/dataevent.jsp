@@ -9,7 +9,9 @@
     <t:insertAttribute name="header" />
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/globalize.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/dx.chartjs.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/dx.module-core.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/dx.module-viz-core.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/dx.module-viz-charts.js"></script>
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/api/DataEventLoader.js"></script>
 
@@ -22,7 +24,12 @@
         new DataEventLoader({
             dataEventId: "${dataEventId}",
             dataEventDivId: "dataEventDiv",
-            dataEventTitleId: "dataEventTitle"
+            dataEventTitleId: "dataEventTitle",
+            dataEventDescriptionId: "dataEventDescription",
+            startDateId: "startDate",
+            endDateId: "endDateId",
+            dataEventContentTbodyId: "dataEventContentTbody",
+            chartContainerId: "chartContainer"
         });
     });
 </script>
@@ -48,9 +55,40 @@
                     <li id="dataEventTitle" class="active"></li>
                 </ol>
 
-                <div id="chartContainer" style="max-width:800px;height: 400px;"></div>
+                <p id="dataEventDescription"></p>
+                <p>
+                    <label>Начало измерения: </label>
+                    <label id="startDate"></label>
+                    <label>Конец измерения</label>
+                    <label id="endData"></label>
+                </p>
+                <div id="chartContainer" style="height: 400px;"></div>
             </div>
 
+            <div class="row">
+                <p class="pull-right"><a href="#">Скачать в Excel</a></p>
+                <div id="dataEventContentTable" class="table-responsive">
+                    <table class="table table-condensed table-hover table-bordered table-striped">
+
+                        <thead>
+                            <tr>
+                                <th>header</th>
+                                <th>Счетчик</th>
+                                <th>Дата Android</th>
+                                <th>Дата устройства</th>
+                                <th>pulse</th>
+                                <th>X</th>
+                                <th>Y</th>
+                                <th>Z</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="dataEventContentTbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

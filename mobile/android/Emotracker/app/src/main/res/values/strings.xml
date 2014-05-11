@@ -23,6 +23,8 @@
     <string name="bt_scan">Scan</string>
     <string name="bt_stop">Stop</string>
     <string name="bt_record">Record!</string>
+    <string name="bt_cancel">Cancel</string>
+    <string name="bt_record_title">Record an event</string>
     <string name="bt_searching">Searching…</string>
     <string name="bt_not_connected">Not connected</string>
     <string name="bt_connected_to">Connected to: </string>
@@ -36,4 +38,10 @@
     <string name="graph_time">Device time:</string>
     <string name="graph_system_time">System time:</string>
     <string name="graph_measure_time">Measure time:</string>
+    <string name="x">X:</string>
+    <string name="y">Y:</string>
+    <string name="z">Z:</string>
+
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>

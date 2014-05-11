@@ -7,6 +7,8 @@ import java.util.List;
 /**
  * Created by petrpopov on 11.03.14.
  */
+
+@Deprecated
 public class UserDataDTO {
 
     @NotBlank

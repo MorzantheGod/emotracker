@@ -151,6 +151,7 @@ public class LoginActivity extends BaseActivity {
         private UserService userService = new UserService();
 
         @Override
+        @SuppressWarnings("unchecked")
         protected WebMessage doInBackground(LoginDTO... loginDTOs) {
 
             WebMessage<UserDTO> message = new WebMessage();

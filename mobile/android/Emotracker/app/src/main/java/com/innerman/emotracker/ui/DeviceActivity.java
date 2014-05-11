@@ -1,31 +1,44 @@
 package com.innerman.emotracker.ui;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
 import com.innerman.emotracker.R;
 import com.innerman.emotracker.bluetooth.BluetoohManager;
 import com.innerman.emotracker.bluetooth.BluetoothManagerState;
 import com.innerman.emotracker.config.AppSettings;
+import com.innerman.emotracker.config.UserDataStorage;
 import com.innerman.emotracker.model.device.DartaSensorDTO;
+import com.innerman.emotracker.model.network.DataEventDTO;
 import com.innerman.emotracker.model.network.DeviceDTO;
+import com.innerman.emotracker.model.network.MessageState;
+import com.innerman.emotracker.model.network.WebMessage;
+import com.innerman.emotracker.service.DataService;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DeviceActivity extends BaseActivity implements ScanActivity {
@@ -50,6 +63,11 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
     private volatile GraphView.GraphViewData[] graphData;
     private long startTime = 0;
 
+    private boolean btWorkStatus = false;
+
+    private DataEventDTO mainDataEvent = new DataEventDTO();
+    private UserDataStorage storage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -68,11 +86,14 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        storage = new UserDataStorage(getApplicationContext(), getString(R.string.config_name));
+
         addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new AddButtonClickListener());
 
         recordButton = (Button) findViewById(R.id.recordButton);
-        recordButton.setOnClickListener(new RecordButtonClickListener());
+
+        recordButton.setOnClickListener(new RecordButtonClickListener(this));
 
         statusView = (TextView) findViewById(R.id.statusView);
         addDeviceView = (TextView) findViewById(R.id.addDeviceView);
@@ -139,6 +160,14 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
             DartaSensorDTO dto = (DartaSensorDTO) msg.obj;
 
+            List<DartaSensorDTO> sensors = mainDataEvent.getSensors();
+            if( sensors == null ) {
+                sensors = new ArrayList<DartaSensorDTO>();
+                mainDataEvent.setSensors(sensors);
+            }
+            sensors.add(dto);
+            mainDataEvent.setEndDate(dto.getSystemDate());
+
             double p = (double)dto.getPulseMs();
             p /= 1000.0;
 
@@ -147,6 +176,8 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
             status += "\t" + getString(R.string.graph_measure_time) + " " + (int)Math.ceil(((double)timeDiff)/1000.0) + " s";
             status += "\n" + getString(R.string.graph_time) + " " + DATE_FORMATTER.format(dto.getDeviceDate());
             status += "\t" + getString(R.string.graph_system_time) + " " + DATE_FORMATTER.format(dto.getSystemDate());
+            status += "\n" + getString(R.string.x) + dto.getAccX() + "\t" + getString(R.string.y) + dto.getAccY() + "\t" + getString(R.string.z) + dto.getAccZ();
+
             pulseView.setText(status);
 
             sensorDataList.add(dto);
@@ -332,33 +363,151 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
             bluetoohManager.toggleScanOrAddDevice();
         }
+
+    }
+
+    public boolean isBtWorkStatus() {
+        return btWorkStatus;
+    }
+
+    public void setBtWorkStatus(boolean btWorkStatus) {
+        this.btWorkStatus = btWorkStatus;
     }
 
     private final class RecordButtonClickListener implements View.OnClickListener {
 
+        private Activity activity;
+
+        private RecordButtonClickListener(Activity activity) {
+            this.activity = activity;
+        }
+
         @Override
         public void onClick(View view) {
 
-            if( !bluetoohManager.isReading() ) {
-                recordButton.setText(getString(R.string.bt_stop));
+            if( !isBtWorkStatus() ) {
 
-                sensorDataList = new ArrayList<DartaSensorDTO>();
-                graphData = new GraphView.GraphViewData[0];
+                LayoutInflater inflater = activity.getLayoutInflater();
 
-                if( graphSeries != null ) {
-                    graphSeries.resetData(graphData);
-                }
 
-                pulseView.setText(getString(R.string.graph_title) + " ");
-                watingView.setVisibility(View.VISIBLE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-                bluetoohManager.startReading();
+                View dialogView = inflater.inflate(R.layout.dialog_record, null);
+                builder.setView(dialogView);
+
+                final EditText titleDataEvent = (EditText) dialogView.findViewById(R.id.titleDataEvent);
+                final EditText descriptionDataEvent = (EditText) dialogView.findViewById(R.id.descriptionDataEvent);
+
+                builder.setTitle(R.string.bt_record_title);
+                builder.setPositiveButton(R.string.bt_record, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                        //do nothing - override in dialog, to prevent dismiss
+                    }
+                });
+                builder.setNegativeButton(R.string.bt_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+
+                        dialog.cancel();
+
+                        setBtWorkStatus(false);
+                    }
+                });
+
+
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        boolean close = true;
+
+                        String title = titleDataEvent.getText().toString();
+                        if(Strings.isNullOrEmpty(title) ) {
+                            close = false;
+                        }
+
+                        String description = descriptionDataEvent.getText().toString();
+
+                        if( close ) {
+                            dialog.dismiss();
+
+                            mainDataEvent = new DataEventDTO();
+                            mainDataEvent.setName(title);
+                            mainDataEvent.setDescription(description);
+                            mainDataEvent.setStartDate(new Date());
+                            mainDataEvent.setUserId(storage.getUserId());
+
+                            if (!bluetoohManager.isReading()) {
+                                recordButton.setText(getString(R.string.bt_stop));
+
+                                sensorDataList = new ArrayList<DartaSensorDTO>();
+                                graphData = new GraphView.GraphViewData[0];
+
+                                if (graphSeries != null) {
+                                    graphSeries.resetData(graphData);
+                                }
+
+                                pulseView.setText(getString(R.string.graph_title) + " ");
+                                watingView.setVisibility(View.VISIBLE);
+
+                                bluetoohManager.startReading();
+
+                                setBtWorkStatus(true);
+                            }
+                        }
+
+
+                    }
+                });
+
+
             }
             else {
                 recordButton.setText(getString(R.string.bt_record));
                 watingView.setVisibility(View.GONE);
 
                 bluetoohManager.cancelReading();
+
+                setBtWorkStatus(false);
+
+                showMessage(getString(R.string.sending_data));
+                new SendDataEventHttpRequestTask().execute(mainDataEvent);
+            }
+        }
+    }
+
+    protected class SendDataEventHttpRequestTask extends AsyncTask<DataEventDTO, Void, WebMessage> {
+
+        private DataService dataService = new DataService();
+
+        @Override
+        @SuppressWarnings("unchecked")
+        protected WebMessage doInBackground(DataEventDTO... dataEventDTOs) {
+
+            WebMessage<DataEventDTO> message = new WebMessage();
+
+            if(dataEventDTOs == null || dataEventDTOs.length <= 0 ) {
+                return message;
+            }
+
+            message = dataService.saveDataEvent(dataEventDTOs[0]);
+
+            return message;
+        }
+
+        @Override
+        protected void onPostExecute(WebMessage webMessage) {
+            super.onPostExecute(webMessage);
+
+            if( !webMessage.getState().equals(MessageState.OK)) {
+                showMessage(webMessage.getMessage());
+            }
+            else {
+                showMessage(getString(R.string.yarr));
             }
         }
     }
