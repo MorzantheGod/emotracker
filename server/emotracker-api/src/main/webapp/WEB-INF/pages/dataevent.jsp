@@ -29,7 +29,8 @@
             startDateId: "startDate",
             endDateId: "endDateId",
             dataEventContentTbodyId: "dataEventContentTbody",
-            chartContainerId: "chartContainer"
+            chartContainerId: "chartPulseContainer",
+            chartAccContainerId: "chartAccContainer"
         });
     });
 </script>
@@ -62,7 +63,14 @@
                     <label>Конец измерения</label>
                     <label id="endData"></label>
                 </p>
-                <div id="chartContainer" style="height: 400px;"></div>
+            </div>
+
+            <div class="row">
+                <div id="chartPulseContainer" style="height: 400px;"></div>
+            </div>
+
+            <div class="row">
+                <div id="chartAccContainer" style="height: 400px;"></div>
             </div>
 
             <div class="row">
@@ -72,11 +80,11 @@
 
                         <thead>
                             <tr>
-                                <th>header</th>
+                                <th>Заголовок</th>
                                 <th>Счетчик</th>
                                 <th>Дата Android</th>
                                 <th>Дата устройства</th>
-                                <th>pulse</th>
+                                <th>Пульс</th>
                                 <th>X</th>
                                 <th>Y</th>
                                 <th>Z</th>

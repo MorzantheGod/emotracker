@@ -24,7 +24,8 @@ var DataEventLoader = function(options) {
     var $dataEventDescription = $('#' + options.dataEventDescriptionId );
     var $startDate = $('#' + options.startDateId);
     var $endDate = $('#' + options.endDateId);
-    var $chartContainer = $('#' + options.chartContainerId)
+    var $chartPulseContainer = $('#' + options.chartContainerId);
+    var $chartAccContainer = $('#' + options.chartAccContainerId);
 
 
     //-----------------------------
@@ -84,7 +85,12 @@ var DataEventLoader = function(options) {
             return {counter: val.counter, pulseMs: val.pulseMs, accX: val.accX, accY: val.accY, accZ: val.accZ};
         });
 
-        $chartContainer.dxChart({
+        fillSensorPulseGraph(sensorsArray);
+        fillSensorAccGraph(sensorsArray);
+    };
+
+    var fillSensorPulseGraph = function(sensorsArray) {
+        $chartPulseContainer.dxChart({
             dataSource: sensorsArray,
 
             commonSeriesSettings: {
@@ -107,7 +113,7 @@ var DataEventLoader = function(options) {
             tooltip:{
                 enabled: true
             },
-            title: "Пульс и ускорение",
+            title: "Пульсограмма",
             legend: {
                 verticalAlignment: "bottom",
                 horizontalAlignment: "center"
@@ -121,7 +127,51 @@ var DataEventLoader = function(options) {
 
             commonAxisSettings: {
                 label: {
-                    overlappingBehavior: { mode: 'rotate', rotationAngle: 50 }
+                    overlappingBehavior: { mode: 'rotate', rotationAngle: 0 }
+                }
+            }
+        });
+    };
+
+    var fillSensorAccGraph = function(sensorsArray) {
+        $chartAccContainer.dxChart({
+            dataSource: sensorsArray,
+
+            commonSeriesSettings: {
+                argumentField: "counter",
+                type: "stackedLine"
+            },
+
+            series: [
+//                { valueField: "pulseMs", name: "Пульс", color: '#ffa500' },
+                { valueField: "accX", name: "X accelration" },
+                { valueField: "accY", name: "Y accelration" },
+                { valueField: "accZ", name: "Z accelration" }
+            ],
+
+            argumentAxis:{
+                grid:{
+                    visible: true
+                }
+            },
+            tooltip:{
+                enabled: true
+            },
+            title: "Ускорение по осям X, Y, Z",
+            legend: {
+                verticalAlignment: "bottom",
+                horizontalAlignment: "center"
+            },
+            ommonPaneSettings: {
+                border:{
+                    visible: true,
+                    right: false
+                }
+            },
+
+            commonAxisSettings: {
+                label: {
+                    overlappingBehavior: { mode: 'rotate', rotationAngle: 0 }
                 }
             }
         });

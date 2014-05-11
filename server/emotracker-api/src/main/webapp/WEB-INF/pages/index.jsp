@@ -9,7 +9,6 @@
 
     <t:insertAttribute name="header" />
 
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/api/Emotracker-auth.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/api/Emotracker.js"></script>
 
     <title>Emotracker</title>

@@ -9,6 +9,8 @@ import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.core.utils.ErrorType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,9 @@ public class UserEntityService extends GenericEntityService<UserEntity> {
 
     @Autowired
     private TokenEntityService tokenService;
+
+    @Value("#{properties.admin_username}")
+    private String adminUsername;
 
     private static final String USERNAME_FIELD = "userName";
     private static final String EMAIL_FIELD = "email";
@@ -94,6 +99,20 @@ public class UserEntityService extends GenericEntityService<UserEntity> {
 
         UserEntity saved = updatePasswordForUser(userToSave, dto.getPassword());
         return saved;
+    }
+
+    public UserEntity getAdminUserEntity() {
+
+        UserEntity entity = new UserEntity();
+        entity.setId(adminUsername);
+        entity.setEmail(adminUsername);
+
+        return entity;
+    }
+
+    @Cacheable(value = "users", key = "#id")
+    public UserEntity getUserById(String id) {
+        return this.findById(id);
     }
 
     public UserEntity getUserByUsernameOrEmail(String username) {

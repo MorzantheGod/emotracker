@@ -33,3 +33,5 @@
     <%= request.getScheme()+"://"
             + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>
 </label>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/api/Emotracker-auth.js"></script>

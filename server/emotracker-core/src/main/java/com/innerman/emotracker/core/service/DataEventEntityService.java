@@ -6,9 +6,12 @@ import com.innerman.emotracker.core.model.UserEntity;
 import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.core.utils.ErrorType;
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -31,6 +34,24 @@ public class DataEventEntityService extends GenericEntityService<DataEventEntity
         logger = Logger.getLogger(DataEventEntityService.class);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public DataEventEntity getDataEventForUser(String id, UserEntity user) {
+
+        Query query = new Query();
+
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("userId").is(user.getId()), Criteria.where("$id").is(new ObjectId(id)));
+        query.addCriteria(criteria);
+
+        List<DataEventEntity> list = op.find(query, DataEventEntity.class);
+        if( list == null || list.isEmpty() ) {
+            return null;
+        }
+
+        return list.get(0);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public DataEventEntity saveDataForUser(DataEventDTO dto) throws EmoException {
 
         UserEntity user = userService.findById(dto.getUserId());
@@ -50,11 +71,13 @@ public class DataEventEntityService extends GenericEntityService<DataEventEntity
         return this.save(data);
     }
 
-    public List<DataEventDTO> getLastEventsDTOs() {
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("(hasRole('ROLE_USER') and #user.id==principal.username) or hasRole('ROLE_ADMIN')")
+    public List<DataEventDTO> getLastEventsDTOs(UserEntity user) {
 
         List<DataEventDTO> res = new ArrayList<DataEventDTO>();
 
-        List<DataEventEntity> lastEvents = getLastEvents();
+        List<DataEventEntity> lastEvents = getLastEvents(user);
         for (DataEventEntity event : lastEvents) {
             DataEventDTO dto = DataEventDTO.fromDataEventEntity(event);
             res.add(dto);
@@ -63,9 +86,10 @@ public class DataEventEntityService extends GenericEntityService<DataEventEntity
         return res;
     }
 
-    public List<DataEventEntity> getLastEvents() {
+    private List<DataEventEntity> getLastEvents(UserEntity user) {
 
-        Query query = new Query();
+        Criteria crit = Criteria.where("userId").is(user.getId());
+        Query query = new Query(crit);
         query.with(new Sort(Sort.Direction.DESC, "startDate"));
 
         return op.find(query, DataEventEntity.class);
