@@ -42,7 +42,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Измерения</a></li>
+                <li class="active"><a href="<spring:url value="/"/>">Измерения</a></li>
                 <li><a href="#">Профиль</a></li>
             </ul>
         </div>

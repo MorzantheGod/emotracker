@@ -6,7 +6,6 @@ import com.innerman.emotracker.core.model.UserEntity;
 import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.core.utils.ErrorType;
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -15,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,21 +37,34 @@ public class DataEventEntityService extends GenericEntityService<DataEventEntity
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public DataEventEntity getDataEventForUser(String id, UserEntity user) {
 
-        Query query = new Query();
+//        Query query = new Query();
+//
+//        Criteria criteria = new Criteria();
+//        criteria.andOperator(Criteria.where("userId").is(user.getId()), Criteria.where("id").is(new ObjectId(id)));
+//        query.addCriteria(criteria);
+//
+//        List<DataEventEntity> list = op.find(query, DataEventEntity.class);
+//        if( list == null || list.isEmpty() ) {
+//            return null;
+//        }
+//
+//        return list.get(0);
 
-        Criteria criteria = new Criteria();
-        criteria.andOperator(Criteria.where("userId").is(user.getId()), Criteria.where("$id").is(new ObjectId(id)));
-        query.addCriteria(criteria);
-
-        List<DataEventEntity> list = op.find(query, DataEventEntity.class);
-        if( list == null || list.isEmpty() ) {
-            return null;
+        DataEventEntity data = op.findById(id, DataEventEntity.class);
+        if( data != null ) {
+            if( !data.getUserId().equals(user.getId())) {
+                return null;
+            }
         }
 
-        return list.get(0);
+        if( data.getSensors() != null ) {
+            Collections.sort(data.getSensors());
+        }
+
+        return data;
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public DataEventEntity saveDataForUser(DataEventDTO dto) throws EmoException {
 
         UserEntity user = userService.findById(dto.getUserId());
@@ -71,7 +84,7 @@ public class DataEventEntityService extends GenericEntityService<DataEventEntity
         return this.save(data);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 //    @PreAuthorize("(hasRole('ROLE_USER') and #user.id==principal.username) or hasRole('ROLE_ADMIN')")
     public List<DataEventDTO> getLastEventsDTOs(UserEntity user) {
 

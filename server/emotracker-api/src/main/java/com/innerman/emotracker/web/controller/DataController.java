@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -47,14 +48,14 @@ public class DataController {
 
     @RequestMapping(value = "/saveDataEvent", method = RequestMethod.POST)
     @ResponseBody
-    public Object saveDataEvent(@Valid @RequestBody DataEventDTO data, BindingResult result) {
+    public Object saveDataEvent(HttpServletRequest request, @RequestBody DataEventDTO dto, BindingResult result) {
 
         if( result.hasErrors() ) {
             return WebMessage.createValidationError();
         }
 
         try {
-            dataEventEntityService.saveDataForUser(data);
+            dataEventEntityService.saveDataForUser(dto);
         }
         catch (EmoException e) {
             return WebMessage.createError(e);

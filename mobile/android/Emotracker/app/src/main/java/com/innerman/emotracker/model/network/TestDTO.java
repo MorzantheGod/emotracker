@@ -1,57 +1,21 @@
-package com.innerman.emotracker.core.dto;
-
-import com.innerman.emotracker.core.model.DataEventEntity;
+package com.innerman.emotracker.model.network;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * User: petrpopov
- * Date: 08.05.14
- * Time: 23:50
+ * Created by petrpopov on 12.05.14.
  */
-
-public class DataEventDTO {
-
-    private String id;
+public class TestDTO {
 
     private String userId;
-
     private String name;
     private String description;
 
     private Date startDate;
     private Date endDate;
 
-    private List<DartaSensorDTO> sensors;
     private List<String> tags;
-
-
-    public static DataEventDTO fromDataEventEntity(DataEventEntity entity) {
-
-        if( entity == null ) {
-            return null;
-        }
-
-        DataEventDTO res = new DataEventDTO();
-
-        res.setId(entity.getId());
-        res.setUserId(entity.getUserId());
-        res.setName(entity.getName());
-        res.setDescription(entity.getDescription());
-        res.setStartDate(entity.getStartDate());
-        res.setEndDate(entity.getEndDate());
-
-        return res;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;
@@ -91,14 +55,6 @@ public class DataEventDTO {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public List<DartaSensorDTO> getSensors() {
-        return sensors;
-    }
-
-    public void setSensors(List<DartaSensorDTO> sensors) {
-        this.sensors = sensors;
     }
 
     public List<String> getTags() {

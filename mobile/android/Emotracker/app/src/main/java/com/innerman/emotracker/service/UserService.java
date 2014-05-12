@@ -19,11 +19,6 @@ public class UserService extends ApiService<UserDTO> {
         super(UserDTO.class);
     }
 
-    public WebMessage testUser() {
-
-        WebMessage test = this.getForObject(TEST_USER);
-        return test;
-    }
 
     public WebMessage<UserDTO> signUpUser(RegistrationDTO dto) {
 

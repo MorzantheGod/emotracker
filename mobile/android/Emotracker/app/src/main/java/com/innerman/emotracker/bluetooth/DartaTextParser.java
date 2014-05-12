@@ -2,6 +2,7 @@ package com.innerman.emotracker.bluetooth;
 
 import com.google.common.base.Strings;
 import com.innerman.emotracker.model.device.DartaSensorDTO;
+import com.innerman.emotracker.model.device.DartaSensorDTOManager;
 import com.innerman.emotracker.model.device.DartaSensorRawDTO;
 
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class DartaTextParser {
 
             DartaSensorRawDTO raw = DartaSensorRawDTO.fromString(parts);
 
-            DartaSensorDTO dto = DartaSensorDTO.fromRawDTO(raw);
-            if( dto.isValid() ) {
+            DartaSensorDTO dto = DartaSensorDTOManager.fromRawDTO(raw);
+            if( DartaSensorDTOManager.isValid(dto) ) {
                 list.add(dto);
             }
         }

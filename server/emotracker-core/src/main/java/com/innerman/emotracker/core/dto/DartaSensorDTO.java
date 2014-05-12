@@ -7,7 +7,7 @@ import java.util.Date;
  * Date: 07.05.14
  * Time: 1:00
  */
-public class DartaSensorDTO {
+public class DartaSensorDTO implements Comparable {
 
     private String header;
     private int counter;
@@ -81,5 +81,32 @@ public class DartaSensorDTO {
 
     public void setAccZ(int accZ) {
         this.accZ = accZ;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+
+        if( o == null ) {
+            return 0;
+        }
+
+        if( !(o instanceof DartaSensorDTO) ) {
+            return 0;
+        }
+
+        DartaSensorDTO s = (DartaSensorDTO) o;
+        int s_counter = s.getCounter();
+
+        if( counter < s_counter ) {
+            return -1;
+        }
+        else if( counter == s_counter ) {
+            return 0;
+        }
+        else if( counter > s_counter ) {
+            return 1;
+        }
+
+        return 0;
     }
 }
