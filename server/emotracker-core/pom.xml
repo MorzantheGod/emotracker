@@ -27,11 +27,19 @@
 
     <dependencies>
 
+        <!-- Reports -->
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>${jasperReport.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>2.6.12</version>
+        </dependency>
+        <!-- End of reports -->
+
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -188,6 +196,7 @@
             <version>4.1</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -199,31 +208,31 @@
         </resources>
 
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jasperreports-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile-reports</goal>
-                        </goals>
-                    </execution>
-                </executions>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>jasperreports-maven-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>compile-reports</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
 
-                <configuration>
-                    <sourceDirectory>src/main/resources/reports</sourceDirectory>
-                    <outputDirectory>src/main/resources/reports</outputDirectory>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<sourceDirectory>src/main/resources/reports</sourceDirectory>-->
+                    <!--<outputDirectory>src/main/resources/reports</outputDirectory>-->
+                <!--</configuration>-->
 
-                <dependencies>
-                    <!--note this must be repeated here to pick up correct xml validation -->
-                    <dependency>
-                        <groupId>net.sf.jasperreports</groupId>
-                        <artifactId>jasperreports</artifactId>
-                        <version>${jasperReport.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+                <!--<dependencies>-->
+                    <!--&lt;!&ndash;note this must be repeated here to pick up correct xml validation &ndash;&gt;-->
+                    <!--<dependency>-->
+                        <!--<groupId>net.sf.jasperreports</groupId>-->
+                        <!--<artifactId>jasperreports</artifactId>-->
+                        <!--<version>${jasperReport.version}</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

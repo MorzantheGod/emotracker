@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -197,22 +198,19 @@ public class DataController {
     }
 
     @RequestMapping(value = "/getDataEventReport.action", method = RequestMethod.GET)
-    public void compileReport(@RequestParam String id, HttpServletResponse response) throws JRException, IOException {
+    public void compileReport(@RequestParam String id, HttpServletResponse response) throws JRException, IOException, SQLException {
 
         UserEntity user = userContextHandler.currentContextUser();
         if( user == null ) {
             return;
         }
 
-        byte[] bytes = reportManager.getDataEventReport(id, user);
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment; filename=report"  + ".xls");
 
-        response.setContentType( "application/pdf");
-        response.setContentLength(bytes.length);
 
         ServletOutputStream ouputStream = response.getOutputStream();
-        ouputStream.write(bytes, 0, bytes.length );
-        ouputStream.flush() ;
-        ouputStream.close();
+        reportManager.generateExcelReport(ouputStream, id, user);
     }
 
 }

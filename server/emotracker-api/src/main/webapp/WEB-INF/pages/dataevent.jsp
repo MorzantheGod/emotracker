@@ -76,7 +76,13 @@
 
             <div class="row">
                 <p class="pull-right">
-                    <a id="reportLink" href="<spring:url value="/api/data/getDataEventReport.action"/>">Скачать в Excel</a>
+                    <a id="reportLink"
+                       href="
+                       <spring:url value="/api/data/getDataEventReport.action">
+                            <spring:param name="id" value="${dataEventId}"/>
+                       </spring:url>">
+                        Скачать в Excel
+                    </a>
                 </p>
                 <div id="dataEventContentTable" class="table-responsive">
                     <table class="table table-condensed table-hover table-bordered table-striped">

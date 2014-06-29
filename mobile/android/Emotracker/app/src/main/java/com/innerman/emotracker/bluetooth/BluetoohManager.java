@@ -15,6 +15,7 @@ import com.innerman.emotracker.ui.ScanActivity;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class BluetoohManager extends BroadcastReceiver {
     private static final String PAIRING_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
 
     private static final String DEVICE_NAME = "H-C-2010-06-01";
+    private static final List<String> DEVICE_NAME_LIST = Arrays.asList(DEVICE_NAME, "Emotracker", "EmoDEV");
+
     private boolean isScanning = false;
     private boolean isReading = false;
 
@@ -95,7 +98,8 @@ public class BluetoohManager extends BroadcastReceiver {
 
                 sendCurrentStateMessage(BluetoothManagerState.START_SCAN);
 
-                Map<String, BluetoothDevice> devices = performBluetoothScan();
+                //disable paired devices
+                Map<String, BluetoothDevice> devices = new HashMap<String, BluetoothDevice>(); //performBluetoothScan();
                 if( devices.isEmpty() ) {
                     sendCurrentStateMessage(BluetoothManagerState.START_DISCOVERY);
 
@@ -148,7 +152,7 @@ public class BluetoohManager extends BroadcastReceiver {
                 return;
             }
 
-            if( name.contains(DEVICE_NAME)) {
+            if( DEVICE_NAME_LIST.contains(name) ) {
                 deviceNames.put(device.getName(), device.getAddress());
                 devices.put(device.getName(), device);
 
@@ -237,7 +241,7 @@ public class BluetoohManager extends BroadcastReceiver {
     public DeviceDTO startReading() {
 
         BluetoothDevice device = getMainBluetoothDevice();
-        return startReadingFromPolarDevice(device);
+        return startReadingFromDevice(device);
     }
 
     public void cancelReading() {
@@ -267,7 +271,7 @@ public class BluetoohManager extends BroadcastReceiver {
 
         for (Map.Entry<String, BluetoothDevice> entry : this.devices.entrySet()) {
             String key = entry.getKey();
-            if( key.contains(DEVICE_NAME)) {
+            if( DEVICE_NAME_LIST.contains(key) ) {
 
                 BluetoothDevice device = entry.getValue();
                 return device;
@@ -277,8 +281,7 @@ public class BluetoohManager extends BroadcastReceiver {
         return null;
     }
 
-    @Deprecated
-    private DeviceDTO startReadingFromPolarDevice(BluetoothDevice device) {
+    private DeviceDTO startReadingFromDevice(BluetoothDevice device) {
 
         DeviceDTO dto = convertBluetoothToDTO(device);
 

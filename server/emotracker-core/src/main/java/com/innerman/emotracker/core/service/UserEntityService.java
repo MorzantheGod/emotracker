@@ -10,7 +10,6 @@ import com.innerman.emotracker.core.utils.ErrorType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -110,7 +109,7 @@ public class UserEntityService extends GenericEntityService<UserEntity> {
         return entity;
     }
 
-    @Cacheable(value = "users", key = "#id")
+//    @Cacheable(value = "users", key = "#id")
     public UserEntity getUserById(String id) {
         return this.findById(id);
     }

@@ -139,6 +139,7 @@
                     <configuration>
                         <type>runtime</type>
                         <properties>
+                            <cargo.runtime.args>force=true</cargo.runtime.args>
                             <cargo.hostname>euve35609.startvps.com</cargo.hostname>
                             <cargo.remote.username>admin</cargo.remote.username>
                             <cargo.remote.password>s9EZYX2Xj</cargo.remote.password>
