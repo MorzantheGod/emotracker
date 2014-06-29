@@ -146,7 +146,7 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
             return;
         }
 
-        if( !(msg.obj instanceof DartaSensorDTO ) ) {
+        if( !(msg.obj instanceof DartaSensorDTO) ) {
             return;
         }
 
