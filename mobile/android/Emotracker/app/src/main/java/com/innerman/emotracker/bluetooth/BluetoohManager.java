@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
-import com.innerman.emotracker.model.device.SensorDTO;
 import com.innerman.emotracker.model.network.DeviceDTO;
 import com.innerman.emotracker.ui.ScanActivity;
 
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +46,6 @@ public class BluetoohManager extends BroadcastReceiver {
 
 
     private BluetoothConnectionThread connThread;
-    private volatile List<SensorDTO> results = new ArrayList<SensorDTO>();
 
     public BluetoohManager(ScanActivity scanActivity) {
         this.scanActivity = scanActivity;
@@ -78,13 +75,6 @@ public class BluetoohManager extends BroadcastReceiver {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
-    @Deprecated
-    public BluetoohManager(Handler scanHandler, Handler readHandler) {
-        this.scanHandler = scanHandler;
-        this.readHandler = readHandler;
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    }
-
     public void toggleScanOrAddDevice() {
 
         boolean scanning = isScanning();
@@ -94,7 +84,6 @@ public class BluetoohManager extends BroadcastReceiver {
 
             boolean enabled = checkForBluetoohEnabled();
             if( enabled ) {
-                results = new ArrayList<SensorDTO>();
 
                 sendCurrentStateMessage(BluetoothManagerState.START_SCAN);
 

@@ -23,13 +23,6 @@ public class DataService extends ApiService<DataEventDTO> {
         return data;
     }
 
-//    @Deprecated
-//    public WebMessage<DataDTO> saveData(DataDTO dto) {
-//        WebMessage<DataDTO> saveData = this.postForObject(SAVE_DATA, dto);
-//
-//        return saveData;
-//    }
-
     @Override
     protected String getCurrentApiUrl() {
         return API_URL;

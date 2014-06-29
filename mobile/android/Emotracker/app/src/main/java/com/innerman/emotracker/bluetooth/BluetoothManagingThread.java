@@ -51,10 +51,8 @@ public class BluetoothManagingThread extends Thread {
     @Override
     public void run() {
 
-//        parser = new PolarMessageParser();
         keepThread = new BluetoothKeepThread(readHandler);
 
-        byte[] buffer = new byte[1024];  // buffer store for the stream
         char[] buf = new char[1024];
 
         int bytes; // bytes returned from read()
