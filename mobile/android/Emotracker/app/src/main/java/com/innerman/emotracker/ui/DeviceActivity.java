@@ -48,6 +48,7 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
     private Button addButton;
     private Button recordButton;
+    private Button sendButton;
     private TextView statusView;
     private TextView addDeviceView;
     private TextView pulseView;
@@ -65,6 +66,7 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
     private boolean btWorkStatus = false;
 
+    private List<DataEventDTO> mainData = new ArrayList<DataEventDTO>();
     private DataEventDTO mainDataEvent = new DataEventDTO();
     private UserDataStorage storage;
 
@@ -92,8 +94,10 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         addButton.setOnClickListener(new AddButtonClickListener());
 
         recordButton = (Button) findViewById(R.id.recordButton);
-
         recordButton.setOnClickListener(new RecordButtonClickListener(this));
+
+        sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new SendButtonClickListener());
 
         statusView = (TextView) findViewById(R.id.statusView);
         addDeviceView = (TextView) findViewById(R.id.addDeviceView);
@@ -374,6 +378,20 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         this.btWorkStatus = btWorkStatus;
     }
 
+    private final class SendButtonClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+
+            if( mainData == null || mainData.isEmpty() ) {
+                showMessage("Nothing to send");
+                return;
+            }
+
+            new SendDataEventHttpRequestTask().execute(mainData.get(mainData.size()-1));
+        }
+
+    }
     private final class RecordButtonClickListener implements View.OnClickListener {
 
         private Activity activity;
@@ -459,11 +477,8 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
                                 setBtWorkStatus(true);
                             }
                         }
-
-
                     }
                 });
-
 
             }
             else {
@@ -480,35 +495,67 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
         }
     }
 
-    protected class SendDataEventHttpRequestTask extends AsyncTask<DataEventDTO, Void, WebMessage> {
+    protected class SendDataEventHttpRequestTask extends AsyncTask<DataEventDTO, Void, List<WebMessage<DataEventDTO>>> {
 
         private DataService dataService = new DataService();
 
         @Override
         @SuppressWarnings("unchecked")
-        protected WebMessage doInBackground(DataEventDTO... dataEventDTOs) {
+        protected List<WebMessage<DataEventDTO>> doInBackground(DataEventDTO... dataEventDTOs) {
 
-            WebMessage<DataEventDTO> message = new WebMessage();
-
-            if(dataEventDTOs == null || dataEventDTOs.length <= 0 ) {
-                return message;
+            DataEventDTO dto = dataEventDTOs[0];
+            if( !mainData.contains(dto) ) {
+                mainData.add(dto);
             }
 
-            message = dataService.saveDataEvent(dataEventDTOs[0]);
+            return dataService.saveDataEvents(mainData);
 
-            return message;
+//            for (DataEventDTO dto : mainData) {
+//                WebMessage<DataEventDTO> message = new WebMessage();
+//            }
+//
+//
+//
+//
+////            if(dataEventDTOs == null || dataEventDTOs.length <= 0 ) {
+////                return message;
+////            }
+//
+//
+//            message = dataService.saveDataEvent(dataEventDTOs[0]);
+//
+//            return message;
         }
 
         @Override
-        protected void onPostExecute(WebMessage webMessage) {
-            super.onPostExecute(webMessage);
+        protected void onPostExecute(List<WebMessage<DataEventDTO>> webResults) {
+            super.onPostExecute(webResults);
 
-            if( !webMessage.getState().equals(MessageState.OK)) {
-                showMessage(webMessage.getMessage());
+
+            int errorsCount = 0;
+            List<String> errors = new ArrayList<String>();
+
+            for (WebMessage<DataEventDTO> web : webResults) {
+
+                if( !web.getState().equals(MessageState.OK)) {
+                    errorsCount++;
+                    errors.add(web.getMessage());
+                }
+                else {
+                    if( web.getResult() != null ) {
+                        mainData.remove(web.getResult());
+                    }
+                }
+            }
+
+            //show messages
+            if( errorsCount > 0 ) {
+                showMessage(errors.get(0));
             }
             else {
                 showMessage(getString(R.string.yarr));
             }
+
         }
     }
 

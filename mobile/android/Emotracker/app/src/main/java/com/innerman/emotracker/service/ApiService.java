@@ -48,7 +48,6 @@ public abstract class ApiService<T> {
 
         String url = constructUrlForEndpoint(endpoint);
 
-
         try {
             WebMessage message = restTemplate.postForObject(url, requestBodyObject, WebMessage.class);
             return getConvertedResult(message);
