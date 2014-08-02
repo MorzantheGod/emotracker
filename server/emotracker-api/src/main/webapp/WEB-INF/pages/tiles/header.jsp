@@ -29,6 +29,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery-ui.datepicker.ru.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/jquery-ui-timepicker-addon-1.4.js"></script>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lib/date.js"></script>
+
 <label id="realPath" hidden="true" style="display: none;">
     <%= request.getScheme()+"://"
             + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() %>

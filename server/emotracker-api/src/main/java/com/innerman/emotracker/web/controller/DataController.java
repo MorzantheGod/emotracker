@@ -208,7 +208,6 @@ public class DataController {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "attachment; filename=report"  + ".xls");
 
-
         ServletOutputStream ouputStream = response.getOutputStream();
         reportManager.generateExcelReport(ouputStream, id, user);
     }

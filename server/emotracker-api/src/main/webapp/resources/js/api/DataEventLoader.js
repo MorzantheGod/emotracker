@@ -17,6 +17,7 @@ var DataEventLoader = function(options) {
     var GET_DATA_EVENT_REPORT = "/api/data/getDataEventReport.action";
 
     var DATE_FORMAT_DISPLAY = 'dd.mm.yy';
+    var TIME_FORMAT_DISPLAY = 'HH:mm:ss';
 
     var $dataEventId = options.dataEventId;
     var $dataEventDiv = $('#' + options.dataEventDivId);
@@ -25,6 +26,7 @@ var DataEventLoader = function(options) {
     var $dataEventDescription = $('#' + options.dataEventDescriptionId );
     var $startDate = $('#' + options.startDateId);
     var $endDate = $('#' + options.endDateId);
+    var $timeDate = $('#' + options.timeDateId);
     var $chartPulseContainer = $('#' + options.chartContainerId);
     var $chartAccContainer = $('#' + options.chartAccContainerId);
     var $reportLink = $('#' + options.reportLinkId);
@@ -65,16 +67,31 @@ var DataEventLoader = function(options) {
     };
 
     var fillDescriptionData = function(data) {
-        var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(data.startDate) );
+
+        var startDateObject = new Date(data.startDate);
+        var endDateObject = new Date(data.endDate);
+
+        var displayDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, startDateObject );
         $dataEventTitle.text(displayDate + " " + data.name);
 
         $dataEventDescription.text(data.description);
 
-        var startDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(data.startDate) );
-        $startDate.text(startDate);
+        var startDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, startDateObject );
+        var startDateTime = $.datepicker.formatTime( TIME_FORMAT_DISPLAY,
+            {hour: startDateObject.getHours(), minute: startDateObject.getMinutes(), second: startDateObject.getSeconds()} );
+        $startDate.text(startDate + " " + startDateTime);
 
-        var endDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, new Date(data.endDate) );
-        $endDate.text(endDate);
+        var endDate = $.datepicker.formatDate( DATE_FORMAT_DISPLAY, endDateObject );
+        var endDateTime = $.datepicker.formatTime( TIME_FORMAT_DISPLAY,
+            {hour: endDateObject.getHours(), minute: endDateObject.getMinutes(), second: endDateObject.getSeconds()} );
+        $endDate.text(endDate + " " + endDateTime);
+
+        var seconds = (endDateObject - startDateObject)/1000;
+        var time = (new Date()).clearTime()
+            .addSeconds(seconds)
+            .toString('HH:mm:ss');
+
+        $timeDate.text(time);
     };
 
     var fillSensorGraph = function(data) {

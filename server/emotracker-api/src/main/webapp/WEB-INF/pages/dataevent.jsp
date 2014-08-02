@@ -27,7 +27,8 @@
             dataEventTitleId: "dataEventTitle",
             dataEventDescriptionId: "dataEventDescription",
             startDateId: "startDate",
-            endDateId: "endDateId",
+            endDateId: "endDate",
+            timeDateId: "timeDate",
             dataEventContentTbodyId: "dataEventContentTbody",
             chartContainerId: "chartPulseContainer",
             chartAccContainerId: "chartAccContainer",
@@ -61,8 +62,12 @@
                 <p>
                     <label>Начало измерения: </label>
                     <label id="startDate"></label>
-                    <label>Конец измерения</label>
-                    <label id="endData"></label>
+                    <label>Конец измерения: </label>
+                    <label id="endDate"></label>
+                </p>
+                <p>
+                    <label>Продолжительность: </label>
+                    <label id="timeDate"></label>
                 </p>
             </div>
 

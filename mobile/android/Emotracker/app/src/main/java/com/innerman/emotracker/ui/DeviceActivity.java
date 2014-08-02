@@ -554,6 +554,9 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
             }
             else {
                 showMessage(getString(R.string.yarr));
+                if( mainData != null ) {
+                    mainData.clear();
+                }
             }
 
         }
