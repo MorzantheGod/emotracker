@@ -76,6 +76,8 @@ var Emotracker = function(options) {
                 $('<a/>').attr("href", url).text(displayDate)
             )
         ).append(
+            $('<td/>').text(getTimeInReadableText(val))
+        ).append(
             $('<td/>').append(
                 $('<a/>').attr("href", url).text(val.name ? val.name : "")
             )
@@ -84,6 +86,18 @@ var Emotracker = function(options) {
         );
 
         return tr;
+    };
+
+    var getTimeInReadableText = function(data) {
+        var startDateObject = new Date(data.startDate);
+        var endDateObject = new Date(data.endDate);
+
+        var seconds = (endDateObject - startDateObject)/1000;
+        var time = (new Date()).clearTime()
+            .addSeconds(seconds)
+            .toString('HH:mm:ss');
+
+        return time;
     };
 
     //------------------------------

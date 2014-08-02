@@ -86,12 +86,19 @@ var DataEventLoader = function(options) {
             {hour: endDateObject.getHours(), minute: endDateObject.getMinutes(), second: endDateObject.getSeconds()} );
         $endDate.text(endDate + " " + endDateTime);
 
+        $timeDate.text(getTimeInReadableText(data));
+    };
+
+    var getTimeInReadableText = function(data) {
+        var startDateObject = new Date(data.startDate);
+        var endDateObject = new Date(data.endDate);
+
         var seconds = (endDateObject - startDateObject)/1000;
         var time = (new Date()).clearTime()
             .addSeconds(seconds)
             .toString('HH:mm:ss');
 
-        $timeDate.text(time);
+        return time;
     };
 
     var fillSensorGraph = function(data) {
