@@ -27,18 +27,24 @@
 
     <dependencies>
 
-        <!-- Reports -->
-        <dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-            <version>${jasperReport.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.jexcelapi</groupId>
-            <artifactId>jxl</artifactId>
-            <version>2.6.12</version>
-        </dependency>
-        <!-- End of reports -->
+        <!--&lt;!&ndash; Reports &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>net.sf.jasperreports</groupId>-->
+            <!--<artifactId>jasperreports</artifactId>-->
+            <!--<version>${jasperReport.version}</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>commons-collections</groupId>-->
+                    <!--<artifactId>commons-collections</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>net.sourceforge.jexcelapi</groupId>-->
+            <!--<artifactId>jxl</artifactId>-->
+            <!--<version>2.6.12</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; End of reports &ndash;&gt;-->
 
 
         <dependency>
@@ -164,6 +170,25 @@
             <version>${spring.security.version}</version>
         </dependency>
         <!-- Spring Security ends -->
+
+        <dependency>
+            <groupId>com.haulmont.yarg</groupId>
+            <artifactId>yarg</artifactId>
+            <version>1.0.26</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.slf4j</groupId>

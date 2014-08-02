@@ -11,7 +11,6 @@ import com.innerman.emotracker.core.service.ReportManager;
 import com.innerman.emotracker.core.utils.EmoException;
 import com.innerman.emotracker.web.data.WebMessage;
 import com.innerman.emotracker.web.utils.UserContextHandler;
-import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -198,7 +198,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/getDataEventReport.action", method = RequestMethod.GET)
-    public void compileReport(@RequestParam String id, HttpServletResponse response) throws JRException, IOException, SQLException {
+    public void compileReport(@RequestParam String id, HttpServletResponse response) throws IOException, SQLException {
 
         UserEntity user = userContextHandler.currentContextUser();
         if( user == null ) {
@@ -209,7 +209,12 @@ public class DataController {
         response.setHeader("Content-disposition", "attachment; filename=report"  + ".xls");
 
         ServletOutputStream ouputStream = response.getOutputStream();
-        reportManager.generateExcelReport(ouputStream, id, user);
+//        reportManager.generateExcelReport(ouputStream, id, user);
+        try {
+            reportManager.test(ouputStream, id, user);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
 }
