@@ -147,9 +147,11 @@
                         <type>runtime</type>
                         <properties>
                             <cargo.runtime.args>force=true</cargo.runtime.args>
-                            <cargo.hostname>euve35609.startvps.com</cargo.hostname>
+                            <!--<cargo.hostname>euve35609.startvps.com</cargo.hostname>-->
+                            <cargo.hostname>54.72.252.140</cargo.hostname>
                             <cargo.remote.username>admin</cargo.remote.username>
-                            <cargo.remote.password>s9EZYX2Xj</cargo.remote.password>
+                            <cargo.remote.password>6C0CnvKFoK</cargo.remote.password>
+                            <!--<cargo.remote.password>s9EZYX2Xj</cargo.remote.password>-->
                         </properties>
                     </configuration>
                     <deployer>

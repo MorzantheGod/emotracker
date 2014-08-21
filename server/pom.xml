@@ -24,7 +24,7 @@
         </profile>
 
         <profile>
-            <id>test-emotracker</id>
+            <id>release-emotracker</id>
         </profile>
     </profiles>
 
