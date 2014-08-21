@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.innerman.emotracker.bluetooth.BluetoothManagerState;
 import com.innerman.emotracker.config.AppSettings;
 import com.innerman.emotracker.config.UserDataStorage;
 import com.innerman.emotracker.model.device.DartaSensorDTO;
+import com.innerman.emotracker.model.device.DartaSensorRawDTO;
 import com.innerman.emotracker.model.network.DataEventDTO;
 import com.innerman.emotracker.model.network.DeviceDTO;
 import com.innerman.emotracker.model.network.MessageState;
@@ -41,6 +43,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * В этом классе говнокод, да, я в курсе.
+ * Не было времени его в порядоке привести.
+ */
 public class DeviceActivity extends BaseActivity implements ScanActivity {
 
     private static final String DATE_FORMAT = "HH:mm:ss";
@@ -382,6 +389,37 @@ public class DeviceActivity extends BaseActivity implements ScanActivity {
 
         @Override
         public void onClick(View v) {
+
+            mainData = new ArrayList<DataEventDTO>();
+
+            DataEventDTO eve1 = new DataEventDTO();
+            mainData.add(eve1);
+
+            eve1.setName("Test1");
+            eve1.setDescription("Developer test data");
+            eve1.setStartDate(new Date());
+            eve1.setEndDate(new Date());
+            eve1.setUserId(storage.getUserId());
+            eve1.setSensors(new ArrayList<DartaSensorDTO>());
+            eve1.setTags(new ArrayList<String>());
+
+
+            for (int i = 0; i < 10; i++ ){
+                DartaSensorDTO d = new DartaSensorDTO();
+                d.setCounter(i);
+                d.setHeader("#DAR");
+                d.setPulseMs(333);
+                d.setAccX(23);
+                d.setAccY(21);
+                d.setAccZ(32);
+                d.setDeviceDate(new Date());
+                d.setSystemDate(new Date());
+
+                eve1.getSensors().add(d);
+            }
+
+
+
 
             if( mainData == null || mainData.isEmpty() ) {
                 showMessage("Nothing to send");

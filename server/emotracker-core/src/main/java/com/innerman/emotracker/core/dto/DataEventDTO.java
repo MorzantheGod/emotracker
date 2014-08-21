@@ -26,6 +26,7 @@ public class DataEventDTO {
     private List<DartaSensorDTO> sensors;
     private List<String> tags;
 
+    private String uuid;
 
     public static DataEventDTO fromDataEventEntity(DataEventEntity entity) {
 
@@ -107,5 +108,13 @@ public class DataEventDTO {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
