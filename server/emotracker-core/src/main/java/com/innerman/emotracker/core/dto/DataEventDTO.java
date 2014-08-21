@@ -1,5 +1,6 @@
 package com.innerman.emotracker.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.innerman.emotracker.core.model.DataEventEntity;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
  * Time: 23:50
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DataEventDTO {
 
     private String id;

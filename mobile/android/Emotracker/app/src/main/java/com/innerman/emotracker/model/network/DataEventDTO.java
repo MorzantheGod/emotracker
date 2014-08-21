@@ -25,7 +25,7 @@ public class DataEventDTO implements Serializable {
 
     private List<String> tags;
 
-    private String uuid;
+//    private String uuid;
 
     public String getId() {
         return id;
@@ -91,13 +91,13 @@ public class DataEventDTO implements Serializable {
         this.tags = tags;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+//    public String getUuid() {
+//        return uuid;
+//    }
+//
+//    public void setUuid(String uuid) {
+//        this.uuid = uuid;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -106,13 +106,13 @@ public class DataEventDTO implements Serializable {
 
         DataEventDTO that = (DataEventDTO) o;
 
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return uuid != null ? uuid.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 }

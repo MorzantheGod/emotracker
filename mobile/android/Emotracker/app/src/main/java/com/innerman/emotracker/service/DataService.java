@@ -35,7 +35,7 @@ public class DataService extends ApiService<DataEventDTO> {
             web.setResult(dto);
         }
         else {
-            web.getResult().setUuid(dto.getUuid());
+//            web.getResult().setUuid(dto.getUuid());
         }
 
         return web;
